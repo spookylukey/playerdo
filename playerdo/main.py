@@ -4,8 +4,8 @@ from playerdo.backends.base import Player
 
 def get_running_players(players):
     """
-    Returns a list of players that are running, sorted by priority
-    they should be used
+    Given a list of Player classes, returns a list of players (instances) that
+    are running, sorted by priority they should be tried.
     """
 
     # Get running players
@@ -53,6 +53,9 @@ def print_help(players):
 
 
 def do_command(command, players):
+    """
+    Execute the given command, given a list of Player classes
+    """
     candidates = get_running_players(players)
     if len(candidates) == 0:
         sys.stderr.write("No players running!\n")
