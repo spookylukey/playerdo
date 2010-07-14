@@ -4,7 +4,7 @@ from playerdo.utils import DBusObject
 
 class Exaile(MprisPlayer):
 
-    name = "Exaile"
+    process_name = "exaile"
     bus_name = "org.mpris.exaile"
 
     def is_stopped(self):

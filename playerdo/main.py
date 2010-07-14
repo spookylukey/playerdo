@@ -1,6 +1,6 @@
 from playerdo.backends import *
 from playerdo.backends.base import Player
-
+import sys
 
 def get_running_players(players):
     """
@@ -47,11 +47,6 @@ def do_test(players):
     pass
 
 
-def print_help(players):
-    # Print help and list of supported players
-    pass
-
-
 def do_command(command, players):
     """
     Execute the given command, given a list of Player classes
@@ -66,9 +61,9 @@ def do_command(command, players):
     try:
         player.do_command(command)
     except NotImplementedError:
-        sys.stderr.write("Operation '%s' not support for player '%s'." % (command, player.__name__))
+        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" % (command, player.process_name))
         sys.exit(1)
 
 
 def find_players():
-    return [v for v in globals().values() if type(v) is type and issubclass(v, Player)]
+    return [v for v in globals().values() if type(v) is type and issubclass(v, Player) and v.is_concrete()]

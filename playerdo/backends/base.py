@@ -5,6 +5,13 @@ class Player(object):
 
     process_name = None
 
+    @classmethod
+    def is_concrete(cls):
+        """
+        Returns True if this class corresponds to a real program
+        """
+        return cls.process_name is not None
+
     def is_running(self):
         """
         Returns true if the player program is running.
@@ -36,17 +43,26 @@ class Player(object):
 
     # Commands
     def play(self):
+        """
+        Plays current track in media player.
+        """
         raise NotImplementedError
 
     def pause(self):
+        """
+        Pauses current track in media player.
+        """
         raise NotImplementedError
 
     def unpause(self):
+        """
+        Continues playing current track if paused.
+        """
         raise NotImplementedError
 
     def togglepause(self):
         """
-        Play if paused, pause if playing
+        Plays if paused, pauses if playing.
         """
         is_paused = catch_unimplemented(self.is_paused)
 
@@ -60,7 +76,7 @@ class Player(object):
 
     def playpause(self):
         """
-        Play if stopped/paused, pause if playing
+        Plays if stopped/paused, pauses if playing.
         """
         is_stopped = catch_unimplemented(self.is_stopped)
 
@@ -73,14 +89,26 @@ class Player(object):
             self.togglepause()
 
     def stop(self):
+        """
+        Stops playing.
+        """
         raise NotImplementedError
 
     def next(self):
+        """
+        Plays next track.
+        """
         raise NotImplementedError
 
     def prev(self):
+        """
+        Plays previous track.
+        """
         raise NotImplementedError
 
     def osd(self):
+        """
+        Shows OSD (on screen display).
+        """
         raise NotImplementedError
 
