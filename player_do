@@ -7,7 +7,6 @@
 # some music players do not have such a state or it cannot be determined.
 #
 
-from optparse import OptionParser
 from playerdo.main import do_test, do_command, find_players
 from playerdo.backends.base import Player
 import sys
