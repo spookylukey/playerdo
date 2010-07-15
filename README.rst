@@ -13,3 +13,7 @@ playpause' etc, and player_do generally does the Right Thing.
 The currently supported programs can be seen by running 'player_do help'.  To
 add more supported programs, see the existing code in the 'backends' directory.
 Patches gratefully received!
+
+Many players support the MPRIS DBUS protocol, and will be supported without
+a specific backend.  If you only need support for those players, consider
+using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.

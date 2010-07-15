@@ -11,7 +11,7 @@ setup(
     author_email = "L.Plant.98@cantab.net",
     description = "Control various media players from a single command line interface.",
     license = "BSD",
-    keywords = "music player command interface wrapper",
+    keywords = "music media MPRIS player command interface wrapper",
     url = "http://bitbucket.org/spookylukey/playerdo",
     classifiers = [
         "Topic :: Multimedia :: Sound/Audio :: Players",
