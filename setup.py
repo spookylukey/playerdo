@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 setup(
-    name = "player_do",
+    name = "playerdo",
     version = "0.1",
     packages = find_packages(),
     scripts = ['player_do'],
