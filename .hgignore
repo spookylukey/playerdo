@@ -3,4 +3,4 @@ syntax:glob
 *.pyc
 *\.\#*
 *\#
-settings*priv.py
+playerdo.egg-info/*
