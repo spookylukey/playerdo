@@ -5,6 +5,7 @@ from playerdo.utils import process_stdout, process_retval
 class Moc(Player):
 
     process_name = "mocp"
+    friendly_name = "moc"
 
     def is_stopped(self):
         info = process_stdout(["mocp", "-i"])

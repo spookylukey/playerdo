@@ -3,14 +3,8 @@ from playerdo.utils import program_running, catch_unimplemented
 # Base class useful for implementing players
 class Player(object):
 
-    process_name = None
-
-    @classmethod
-    def is_concrete(cls):
-        """
-        Returns True if this class corresponds to a real program
-        """
-        return cls.process_name is not None
+    process_name = None # used for pidof
+    friendly_name = None # used for display in help
 
     def is_running(self):
         """

@@ -8,6 +8,7 @@ class ShellFm(Player):
     #  shc (compiled version of shc.hs from shell-fm's sources)
 
     process_name = "shell-fm"
+    friendly_name = "shell-fm"
 
     def is_stopped(self):
         return not os.path.isfile(os.path.join(os.environ['HOME'],

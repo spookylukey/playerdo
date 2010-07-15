@@ -32,7 +32,9 @@ Not all operations are supported or fully supported by all players.
 Currently supported players are:
 """
     for P in players:
-        help += " " + P.process_name + "\n"
+        n = getattr(P, 'friendly_name', None)
+        if n is not None:
+            help += " " + n + "\n"
 
     return help
 

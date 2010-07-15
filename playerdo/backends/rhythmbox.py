@@ -5,6 +5,7 @@ from playerdo.utils import process_retval
 class RhythmBox(Player):
 
     process_name = "rhythmbox"
+    friendly_name = "rhythmbox"
 
     def is_stopped(self):
         # rhythmbox doesn't seem to have this state

@@ -3,11 +3,34 @@ from playerdo.utils import DBusObject
 import dbus
 
 
+def get_all_mpris_buses():
+    bus = dbus.SessionBus()
+    return [str(s) for s in bus.list_names() if str(s).startswith('org.mpris.')]
+
+
 class MprisPlayer(Player):
 
-    bus_name = None
+    friendly_name = "Any MPRIS player"
     player_object_name = "/Player"
     tracklist_object_name = "/TrackList"
+
+    @property
+    def bus_name(self):
+        # Use the first one we find.
+        try:
+            return self._bus_name
+        except AttributeError:
+            candidates = get_all_mpris_buses()
+            # Sort by status - playing = 0, paused = 1, stopped = 2
+            l = [(int(DBusObject(n, self.player_object_name).GetStatus()[0]), n)
+                 for n in candidates]
+            l.sort()
+            if len(l) > 0:
+                bus_name = l[0][1]
+            else:
+                bus_name = None
+            self._bus_name = bus_name
+            return bus_name
 
     @property
     def player(self):
@@ -34,8 +57,8 @@ class MprisPlayer(Player):
             return obj
 
     def is_running(self):
-        # pidof doesn't work for some apps (e.g. exaile), but this should work
-        # for all Mpris apps.
+        if self.bus_name is None:
+            return False
         try:
             # Force evaluation:
             bus = self.player._bus
@@ -44,8 +67,7 @@ class MprisPlayer(Player):
             return False
 
     def is_stopped(self):
-        # This seems to work for exaile and clementine
-        return self.tracklist.GetCurrentTrack() == -1
+        return self.player.GetStatus()[0] == 2
 
     def play(self):
         self.player.Play()
@@ -74,5 +96,6 @@ class MprisPlayer(Player):
 
     def osd(self):
         self.player.ShowOSD()
+
 
 

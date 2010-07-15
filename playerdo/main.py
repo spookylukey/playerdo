@@ -61,9 +61,9 @@ def do_command(command, players):
     try:
         player.do_command(command)
     except NotImplementedError:
-        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" % (command, player.process_name))
+        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" % (command, player.friendly_name))
         sys.exit(1)
 
 
 def find_players():
-    return [v for v in globals().values() if type(v) is type and issubclass(v, Player) and v.is_concrete()]
+    return [v for v in globals().values() if type(v) is type and issubclass(v, Player)]
