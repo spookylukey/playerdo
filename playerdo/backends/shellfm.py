@@ -1,5 +1,5 @@
 from playerdo.backends.base import Player
-from playerdo.utils import process_retval
+from playerdo.utils import process_retval, PlayerException
 import os
 
 
@@ -20,9 +20,11 @@ class ShellFm(Player):
             return ["The command line program 'shc', compiled from the shc.hs script that comes with shell-fm, needs to be present on your PATH."]
         return []
 
-
-    # Can't implement 'play', because once you are stopped, shell-fm/shc needs
-    # you to specify a station if you want it to play.
+    def play(self):
+        if not self.is_stopped():
+            self.unpause()
+        else:
+            raise PlayerException("Cannot play shell-fm when in a stopped state.")
 
     def pause(self):
         process_retval(["shc", "pause"])

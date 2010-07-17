@@ -1,5 +1,6 @@
 from playerdo.backends import *
 from playerdo.backends.base import Player
+from playerdo.utils import PlayerException
 import sys
 
 
@@ -75,7 +76,9 @@ def do_command(command, players):
         sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
                          (command, player.friendly_name))
         sys.exit(1)
-
+    except PlayerException, e:
+        sys.stderr.write(e.message + "\n")
+        sys.exit(1)
 
 def find_players():
     return [v for v in globals().values()

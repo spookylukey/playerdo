@@ -66,3 +66,12 @@ def catch_unimplemented(c, replacement=None):
         return c()
     except NotImplementedError:
         return replacement
+
+
+class PlayerException(Exception):
+    """
+    An exception that should be handled nicely by the front end
+    """
+
+    def __init__(self, message):
+        self.message = message
