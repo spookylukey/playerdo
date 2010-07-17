@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 #
-# Wrapper for controlling various music players, so that you can define keyboard
-# shortcuts that work for whatever player you are using.  Ideally it will still
-# work even if multiple players are running if all but one are 'stopped', but
-# some music players do not have such a state or it cannot be determined.
+# Wrapper for controlling various music players, so that you can define
+# keyboard shortcuts that work for whatever player you are using.  Ideally it
+# will still work even if multiple players are running if all but one are
+# 'stopped', but some music players do not have such a state or it cannot be
+# determined.
 #
 
 from playerdo.main import do_test, do_command, find_players
@@ -12,19 +13,19 @@ from playerdo.backends.base import Player
 import sys
 
 
-
 def usage(players):
     # Print help and list of supported players
     help = """Usage: player_do <command>
 
-  Media players that are currently running will be detected, and the command will
-  be passed on to the first, giving priority to players that seem to be active.
+  Media players that are currently running will be detected, and the command
+  will be passed on to the first, giving priority to players that seem to be
+  active.
 
 <command> is one of:
 """
     max_len = len(sorted(commands, key=lambda c: len(c[0]))[-1][0])
     for name, doc, f in commands:
-        help += " " + name +  " "*(max_len - len(name) + 2) + doc + "\n"
+        help += " " + name + " " * (max_len - len(name) + 2) + doc + "\n"
 
     help += """
 Not all operations are supported or fully supported by all players.
@@ -44,10 +45,10 @@ def print_usage(players):
 
 
 # List of commands: (name, docstring, callable)
-
 commands = []
 
-for c in ["play", "pause", "unpause", "togglepause", "playpause", "stop", "next", "prev", "osd"]:
+for c in ["play", "pause", "unpause", "togglepause",
+          "playpause", "stop", "next", "prev", "osd"]:
     def mk_command(name):
         def command(players):
             return do_command(name, players)
@@ -60,7 +61,6 @@ commands.extend([
     ("test", "Tests that all dependencies are available.", do_test),
     ("help", "Prints help.", print_usage),
 ])
-
 
 command_dict = dict((name, f) for name, doc, f in commands)
 
@@ -79,4 +79,3 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         command(players)
-

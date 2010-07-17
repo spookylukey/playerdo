@@ -16,6 +16,7 @@ def process_stdout(args, input=None):
         pass
     return retval
 
+
 def process_retval(args, input=None):
     """
     Executes the process with the commandline specified in 'args' and returns
@@ -25,11 +26,13 @@ def process_retval(args, input=None):
     p.communicate(input=input)
     return p.returncode
 
+
 def process_true(args, input=None):
     """
     Executes a process and rturns true if the process has a zero return code
     """
     return process_retval(args, input=input) == 0
+
 
 def program_running(progam):
     return process_true(["pidof", progam])
@@ -41,6 +44,7 @@ class DBusObject(object):
     Wrapper for a dbus object, so that the bus name and object name only needs
     to be specified once.
     """
+
     def __init__(self, bus_name, object_name):
         bus = dbus.SessionBus()
         self._bus = bus
@@ -55,10 +59,10 @@ class DBusObject(object):
 # Misc helpers
 def catch_unimplemented(c, replacement=None):
     """
-    Execute a callable c, returning replacement if it throws NotImplementedError
+    Execute a callable c, returning replacement if it throws
+    NotImplementedError
     """
     try:
         return c()
     except NotImplementedError:
         return replacement
-

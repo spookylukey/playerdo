@@ -5,7 +5,8 @@ import dbus
 
 def get_all_mpris_buses():
     bus = dbus.SessionBus()
-    return [str(s) for s in bus.list_names() if str(s).startswith('org.mpris.')]
+    return [str(s) for s in bus.list_names()
+            if str(s).startswith('org.mpris.')]
 
 
 class MprisPlayer(Player):
@@ -96,6 +97,3 @@ class MprisPlayer(Player):
 
     def osd(self):
         self.player.ShowOSD()
-
-
-

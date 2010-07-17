@@ -1,5 +1,6 @@
 from playerdo.utils import program_running, catch_unimplemented
 
+
 # Base class useful for implementing players
 class Player(object):
 
@@ -105,4 +106,3 @@ class Player(object):
         Shows OSD (on screen display).
         """
         raise NotImplementedError
-

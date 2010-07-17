@@ -2,6 +2,7 @@ from playerdo.backends import *
 from playerdo.backends.base import Player
 import sys
 
+
 def get_running_players(players):
     """
     Given a list of Player classes, returns a list of players (instances) that
@@ -33,14 +34,16 @@ def get_running_players(players):
         elif is_stopped == False:
             state.append(0)
         else:
-            # In-between value for unknowns, because a player that is definitely
-            # stopped is less preferred than one that *might* be playing.
+            # In-between value for unknowns, because a player that is
+            # definitely stopped is less preferred than one that *might* be
+            # playing.
             state.append(1)
 
     l = zip(state, running_ps)
     l.sort()
 
     return [x[1] for x in l]
+
 
 def do_test(players):
     # Check dependencies of all players
@@ -61,9 +64,11 @@ def do_command(command, players):
     try:
         player.do_command(command)
     except NotImplementedError:
-        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" % (command, player.friendly_name))
+        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
+                         (command, player.friendly_name))
         sys.exit(1)
 
 
 def find_players():
-    return [v for v in globals().values() if type(v) is type and issubclass(v, Player)]
+    return [v for v in globals().values()
+            if type(v) is type and issubclass(v, Player)]
