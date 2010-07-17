@@ -3,6 +3,10 @@ from playerdo.utils import program_running, catch_unimplemented
 
 # Base class useful for implementing players
 class Player(object):
+    """
+    Base class for implementing players.  It does not have to
+    be used, but does provide some useful default behaviour.
+    """
 
     process_name = None # used for pidof
     friendly_name = None # used for display in help
