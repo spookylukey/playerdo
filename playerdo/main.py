@@ -46,8 +46,16 @@ def get_running_players(players):
 
 
 def do_test(players):
-    # Check dependencies of all players
-    pass
+    """
+    Checks that all backends have required dependencies, printing any failures
+    """
+    for P in players:
+        p = P()
+        failures = p.check_dependencies()
+        if len(failures) > 0:
+            sys.stdout.write("Player '%s' has missing dependencies:\n" % p.friendly_name)
+            for l in failures:
+                sys.stdout.write("  " + l + "\n")
 
 
 def do_command(command, players):

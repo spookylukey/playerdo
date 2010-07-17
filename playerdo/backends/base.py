@@ -33,6 +33,13 @@ class Player(object):
         """
         raise NotImplementedError
 
+    def check_dependencies(self):
+        """
+        Returns a list of failed dependencies for using this backend, or an
+        empty list if everything is OK.  Most players do not need this.
+        """
+        return []
+
     def do_command(self, command):
         try:
             m = getattr(self, command)

@@ -15,6 +15,12 @@ class ShellFm(Player):
                                                ".shell-fm",
                                                "nowplaying"))
 
+    def check_dependencies(self):
+        if process_retval(["which", "shc"]) != 0:
+            return ["The command line program 'shc', compiled from the shc.hs script that comes with shell-fm, needs to be present on your PATH."]
+        return []
+
+
     # Can't implement 'play', because once you are stopped, shell-fm/shc needs
     # you to specify a station if you want it to play.
 
