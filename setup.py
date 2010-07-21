@@ -18,7 +18,7 @@ setup(
     author_email = "L.Plant.98@cantab.net",
     description = "Control various media players from a single command line interface.",
     long_description = (
-                        read('README.txt')
+                        read('README.rst')
                         + "\n\n" +
                         read('CHANGES.txt')
     ),
