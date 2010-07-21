@@ -15,3 +15,7 @@ Patches gratefully received!
 Many players support the MPRIS DBUS protocol, and will be supported without
 a specific backend.  If you only need support for those players, consider
 using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
+
+Source code: http://bitbucket.org/spookylukey/playerdo/src
+
+Bug tracking: http://bitbucket.org/spookylukey/playerdo/issues
