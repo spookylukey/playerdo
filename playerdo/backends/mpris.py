@@ -13,7 +13,6 @@ class MprisPlayer(Player):
 
     friendly_name = "Any MPRIS player"
     player_object_name = "/Player"
-    tracklist_object_name = "/TrackList"
 
     @property
     def bus_name(self):
@@ -43,18 +42,6 @@ class MprisPlayer(Player):
         except AttributeError:
             obj = DBusObject(self.bus_name, self.player_object_name)
             self._player = obj
-            return obj
-
-    @property
-    def tracklist(self):
-        if self.bus_name is None or self.tracklist_object_name is None:
-            raise NotImplementedError
-
-        try:
-            return self._tracklist
-        except AttributeError:
-            obj = DBusObject(self.bus_name, self.tracklist_object_name)
-            self._tracklist = obj
             return obj
 
     def is_running(self):
