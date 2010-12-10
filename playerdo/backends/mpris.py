@@ -1,9 +1,9 @@
 from playerdo.backends.base import Player
 from playerdo.utils import DBusObject
-import dbus
 
 
 def get_all_mpris_buses():
+    import dbus
     bus = dbus.SessionBus()
     return [str(s) for s in bus.list_names()
             if str(s).startswith('org.mpris.')]
@@ -75,6 +75,11 @@ class MprisPlayer(Player):
             return obj
 
     def is_running(self):
+        try:
+            import dbus
+        except ImportError:
+            return False
+
         if self.bus_name is None:
             return False
         try:
@@ -90,6 +95,14 @@ class MprisPlayer(Player):
     def is_stopped(self):
         return self.player.GetStatus()[0] == 2
 
+    def check_dependencies(self):
+        retval = []
+        try:
+            import dbus
+        except ImportError:
+            retval.append("dbus Python bindings are required")
+        return retval
+
     def play(self):
         self.player.Play()
 
@@ -100,6 +113,7 @@ class MprisPlayer(Player):
         self.play()
 
     def playpause(self):
+        import dbus
         try:
             # Some define this e.g. Exaile
             self.player.PlayPause()

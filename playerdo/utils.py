@@ -1,5 +1,4 @@
 import subprocess
-import dbus
 
 
 # Helpers for process output
@@ -46,6 +45,7 @@ class DBusObject(object):
     """
 
     def __init__(self, bus_name, object_name):
+        import dbus
         bus = dbus.SessionBus()
         self._bus = bus
         self._obj = bus.get_object(bus_name, object_name)
