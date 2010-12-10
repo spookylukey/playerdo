@@ -12,8 +12,7 @@ def get_running_players(players):
 
     # Get running players
     running_ps = []
-    for P in players:
-        p = P()
+    for p in players:
         try:
             running = p.is_running()
             if running:
@@ -50,8 +49,7 @@ def do_test(players):
     """
     Checks that all backends have required dependencies, printing any failures
     """
-    for P in players:
-        p = P()
+    for p in players:
         failures = p.check_dependencies()
         if len(failures) > 0:
             sys.stdout.write("Player '%s' has missing dependencies:\n" % p.friendly_name)
@@ -81,5 +79,5 @@ def do_command(command, players):
         sys.exit(1)
 
 def find_players():
-    return [v for v in globals().values()
+    return [v() for v in globals().values()
             if type(v) is type and issubclass(v, Player)]

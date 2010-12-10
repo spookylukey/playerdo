@@ -18,22 +18,16 @@ def get_sorted_candidate_buses(player_object_name):
     return [n for i, n in l]
 
 
-class classproperty(property):
-    def __get__(self, cls, owner):
-        return self.fget.__get__(None, owner)()
-
-
 class MprisPlayer(Player):
 
     _friendly_name = "Any MPRIS player"
     player_object_name = "/Player"
 
-    @classproperty
-    @classmethod
-    def friendly_name(cls):
-        retval = cls._friendly_name
+    @property
+    def friendly_name(self):
+        retval = self._friendly_name
         try:
-            l = get_sorted_candidate_buses(cls.player_object_name)
+            l = get_sorted_candidate_buses(self.player_object_name)
             names = []
             for n in l:
                 try:

@@ -32,8 +32,8 @@ Not all operations are supported or fully supported by all players.
 
 Currently supported players are:
 """
-    for P in players:
-        n = getattr(P, 'friendly_name', None)
+    for p in players:
+        n = getattr(p, 'friendly_name', None)
         if n is not None:
             help += " " + n + "\n"
 
