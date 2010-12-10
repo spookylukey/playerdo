@@ -84,6 +84,9 @@ class MprisPlayer(Player):
         except dbus.DBusException:
             return False
 
+    def is_paused(self):
+        return self.player.GetStatus()[0] == 1
+
     def is_stopped(self):
         return self.player.GetStatus()[0] == 2
 
