@@ -28,7 +28,7 @@ def process_retval(args, input=None):
 
 def process_true(args, input=None):
     """
-    Executes a process and rturns true if the process has a zero return code
+    Executes a process and returns True if the process has a zero return code
     """
     return process_retval(args, input=input) == 0
 
