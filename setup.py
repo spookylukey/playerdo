@@ -24,7 +24,7 @@ if sys.version_info >= (3,):
 
 setup(
     name = "playerdo",
-    version = "0.2",
+    version = "0.3",
     packages = find_packages(),
     scripts = ['player_do'],
 
