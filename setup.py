@@ -35,7 +35,7 @@ setup(
     long_description = (
                         read('README.rst')
                         + "\n\n" +
-                        read('CHANGES.txt')
+                        read('CHANGES.rst')
     ),
     license = "BSD",
     keywords = "music media MPRIS player command interface wrapper",
