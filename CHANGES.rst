@@ -4,6 +4,7 @@ Change log
 Version 0.3
 -----------
 
+* Fixed fatal packaging bug!
 * Improved help text for MPRIS players (lists currently running players).
 * Made dbus dependency optional
 * Support for Python 3 via 2to3.
