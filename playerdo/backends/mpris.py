@@ -58,7 +58,9 @@ class MprisPlayer(Player):
 
     @property
     def player(self):
-        if self.bus_name is None or self.player_object_name is None:
+        bus_name = self.bus_name
+
+        if bus_name is None:
             raise NotImplementedError
 
         try:
