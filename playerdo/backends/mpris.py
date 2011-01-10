@@ -6,8 +6,8 @@ def get_all_mpris_buses():
     import dbus
     bus = dbus.SessionBus()
     return [str(s) for s in bus.list_names()
-            if str(s).startswith('org.mpris.')]
-
+            if str(s).startswith('org.mpris.')
+            and not str(s).startswith('org.mpris.MediaPlayer2')]
 
 def get_sorted_candidate_buses(player_object_name):
     candidates = get_all_mpris_buses()
@@ -20,7 +20,7 @@ def get_sorted_candidate_buses(player_object_name):
 
 class MprisPlayer(Player):
 
-    _friendly_name = "Any MPRIS player"
+    _friendly_name = "Any MPRIS 1 player"
     player_object_name = "/Player"
 
     @property
