@@ -10,6 +10,7 @@ class Player(object):
 
     process_name = None # used for pidof
     friendly_name = None # used for display in help
+    sort_order = 0 # set lower for higher priority
 
     def is_running(self):
         """

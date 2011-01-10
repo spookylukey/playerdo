@@ -4,12 +4,51 @@ from playerdo.utils import PlayerException
 import sys
 
 
+def sort_players(players):
+    """
+    Returns list of players, sorted by priority.
+    """
+    # Try to find out which one is playing
+    states = []
+    orders = []
+    for p in players:
+        running = False
+        try:
+            running = p.is_running()
+        except NotImplementedError:
+            running = False
+
+        if not running:
+            state = 3
+        else:
+            try:
+                is_stopped = p.is_stopped()
+            except NotImplementedError:
+                is_stopped = None
+
+            if is_stopped == True:
+                state = 2
+            elif is_stopped == False:
+                state = 0
+            else:
+                # In-between value for unknowns, because a player that is
+                # definitely stopped is less preferred than one that *might* be
+                # playing.
+                state = 1
+
+        states.append(state)
+        orders.append(p.sort_order)
+
+    l = zip(states, orders, players)
+    l.sort()
+
+    return [x[2] for x in l]
+
 def get_running_players(players):
     """
     Given a list of Player classes, returns a list of players (instances) that
-    are running, sorted by priority they should be tried.
+    are running.
     """
-
     # Get running players
     running_ps = []
     for p in players:
@@ -20,30 +59,7 @@ def get_running_players(players):
         except NotImplementedError:
             pass
 
-
-    # Try to find out which one is playing
-    state = []
-    for p in running_ps:
-        try:
-            is_stopped = p.is_stopped()
-        except NotImplementedError:
-            is_stopped = None
-
-        if is_stopped == True:
-            state.append(2)
-        elif is_stopped == False:
-            state.append(0)
-        else:
-            # In-between value for unknowns, because a player that is
-            # definitely stopped is less preferred than one that *might* be
-            # playing.
-            state.append(1)
-
-    l = zip(state, running_ps)
-    l.sort()
-
-    return [x[1] for x in l]
-
+    return running_ps
 
 def do_test(players):
     """
@@ -79,5 +95,5 @@ def do_command(command, players):
         sys.exit(1)
 
 def find_players():
-    return [v() for v in globals().values()
-            if type(v) is type and issubclass(v, Player)]
+    return sort_players([v() for v in globals().values()
+                         if type(v) is type and issubclass(v, Player)])

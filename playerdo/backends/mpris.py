@@ -25,6 +25,10 @@ class MprisPlayer(Player):
 
     _friendly_name = "Any MPRIS 1 player"
 
+    # This is a generic interface, so it less preferred
+
+    sort_order = 10
+
     @property
     def friendly_name(self):
         retval = self._friendly_name
