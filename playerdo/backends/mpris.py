@@ -9,25 +9,27 @@ def get_all_mpris_buses():
             if str(s).startswith('org.mpris.')
             and not str(s).startswith('org.mpris.MediaPlayer2')]
 
-def get_sorted_candidate_buses(player_object_name):
+def get_sorted_candidate_buses():
     candidates = get_all_mpris_buses()
     # Sort by status - playing = 0, paused = 1, stopped = 2
-    l = [(int(DBusObject(n, player_object_name).GetStatus()[0]), n)
+    l = [(int(DBusObject(n, PLAYER_OBJECT_NAME).GetStatus()[0]), n)
          for n in candidates]
     l.sort()
     return [n for i, n in l]
 
 
+PLAYER_OBJECT_NAME = "/Player"
+
+
 class MprisPlayer(Player):
 
     _friendly_name = "Any MPRIS 1 player"
-    player_object_name = "/Player"
 
     @property
     def friendly_name(self):
         retval = self._friendly_name
         try:
-            l = get_sorted_candidate_buses(self.player_object_name)
+            l = get_sorted_candidate_buses()
             names = []
             for n in l:
                 try:
@@ -48,7 +50,7 @@ class MprisPlayer(Player):
         try:
             return self._bus_name
         except AttributeError:
-            l = get_sorted_candidate_buses(self.player_object_name)
+            l = get_sorted_candidate_buses()
             if len(l) > 0:
                 bus_name = l[0]
             else:
@@ -66,7 +68,7 @@ class MprisPlayer(Player):
         try:
             return self._player
         except AttributeError:
-            obj = DBusObject(self.bus_name, self.player_object_name)
+            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME)
             self._player = obj
             return obj
 
