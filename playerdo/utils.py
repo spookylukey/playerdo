@@ -55,6 +55,23 @@ class DBusObject(object):
             return getattr(self._obj, name)(*args, **kwargs)
         return f
 
+class DBusProperties(object):
+    # I can't find a decent way of getting properties in python dbus, this is my
+    # wrapper.
+
+    def __init__(self, bus_name, object_name, interface_name):
+        # dbus_object
+        import dbus
+        bus = dbus.SessionBus()
+        self.dbus_object = bus.get_object(bus_name, object_name)
+        self.interface_name = interface_name
+        self.dbus_props = dbus.Interface(self.dbus_object, "org.freedesktop.DBus.Properties")
+
+    def get(self, property_name):
+        return self.dbus_props.Get(self.interface_name, property_name)
+
+    def set(self, property_name, value):
+        self.dbus_props.Set(self.interface_name, property_name, value)
 
 # Misc helpers
 def catch_unimplemented(c, replacement=None):
