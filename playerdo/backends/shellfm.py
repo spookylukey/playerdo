@@ -1,14 +1,25 @@
+import os.path
+import re
+import socket
+
 from playerdo.backends.base import Player
 from playerdo.utils import process_retval, PlayerException
-import os
-
 
 class ShellFm(Player):
-    # Requirements:
-    #  shc (compiled version of shc.hs from shell-fm's sources)
 
     process_name = "shell-fm"
     friendly_name = "shell-fm"
+
+    def _socket_path(self):
+        rc_path = os.path.join(os.environ['HOME'], '.shell-fm', 'shell-fm.rc')
+        conf = file(rc_path).read()
+        return re.search(r'^\s*unix\s*=\s*([^#\s]+)', conf, re.MULTILINE).groups()[0]
+
+    def _send_command(self, command):
+        s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        s.connect(self._socket_path())
+        s.send(command + "\n")
+        s.close()
 
     def is_stopped(self):
         return not os.path.isfile(os.path.join(os.environ['HOME'],
@@ -16,9 +27,12 @@ class ShellFm(Player):
                                                "nowplaying"))
 
     def check_dependencies(self):
-        if process_retval(["which", "shc"]) != 0:
-            return ["The command line program 'shc', compiled from the shc.hs script that comes with shell-fm, needs to be present on your PATH."]
-        return []
+        retval = []
+        try:
+            p = self._socket_path()
+        except Exception:
+            retval.append("Cannot find configuration file ~/.shell-fm/shell-fm.rc, or the 'unix' configuration item in that file.")
+        return retval
 
     def play(self):
         if not self.is_stopped():
@@ -27,13 +41,13 @@ class ShellFm(Player):
             raise PlayerException("Cannot play shell-fm when in a stopped state.")
 
     def pause(self):
-        process_retval(["shc", "pause"])
+        self._send_command("pause")
 
     def unpause(self):
         self.pause()
 
     def stop(self):
-        process_retval(["shc", "stop"])
+        self._send_command("stop")
 
     def next(self):
-        process_retval(["shc", "next"])
+        self._send_command("skip")
