@@ -65,13 +65,13 @@ commands.extend([
 command_dict = dict((name, f) for name, doc, f in commands)
 
 
-if __name__ == '__main__':
+def main(argv):
     players = find_players()
-    if len(sys.argv) < 2:
+    if len(argv) < 2:
         print_usage(players)
         sys.exit(1)
 
-    name = sys.argv[1]
+    name = argv[1]
     command = command_dict.get(name, None)
     if command is None:
         sys.stderr.write("Unrecognised command '%s'.\n\n" % name)
@@ -79,3 +79,6 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         command(players)
+
+if __name__ == '__main__':
+    main(sys.argv)
