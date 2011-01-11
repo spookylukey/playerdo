@@ -44,22 +44,6 @@ def sort_players(players):
 
     return [x[2] for x in l]
 
-def get_running_players(players):
-    """
-    Given a list of Player classes, returns a list of players (instances) that
-    are running.
-    """
-    # Get running players
-    running_ps = []
-    for p in players:
-        try:
-            running = p.is_running()
-            if running:
-                running_ps.append(p)
-        except NotImplementedError:
-            pass
-
-    return running_ps
 
 def do_test(players):
     """
@@ -77,22 +61,27 @@ def do_command(command, players):
     """
     Execute the given command, given a list of Player classes
     """
-    candidates = get_running_players(players)
-    if len(candidates) == 0:
-        sys.stderr.write("No players running!\n")
-        sys.exit(1)
+    for player in players:
+        try:
+            if not player.is_running():
+                continue
+        except NotImplementedError:
+            continue
 
-    # Use the first one
-    player = candidates[0]
-    try:
-        player.do_command(command)
-    except NotImplementedError:
-        sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
-                         (command, player.friendly_name))
-        sys.exit(1)
-    except PlayerException, e:
-        sys.stderr.write(e.message + "\n")
-        sys.exit(1)
+        # Use the first one
+        try:
+            player.do_command(command)
+            return
+        except NotImplementedError:
+            sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
+                             (command, player.friendly_name))
+            sys.exit(1)
+        except PlayerException, e:
+            sys.stderr.write(e.message + "\n")
+            sys.exit(1)
+    sys.stderr.write("No players running!\n")
+    sys.exit(1)
+
 
 def find_players():
     return sort_players([v() for v in globals().values()
