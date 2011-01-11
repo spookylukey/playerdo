@@ -1,6 +1,13 @@
 Change log
 ==========
 
+Version 0.4
+-----------
+
+* Added support for MPRIS2 players
+* Eliminated dependency on shc.hs for the shell-fm backend
+* Various bug fixes/optimisations
+
 Version 0.3
 -----------
 
