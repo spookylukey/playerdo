@@ -12,7 +12,7 @@ class ShellFm(Player):
 
     def _socket_path(self):
         rc_path = os.path.join(os.environ['HOME'], '.shell-fm', 'shell-fm.rc')
-        conf = file(rc_path).read()
+        conf = open(rc_path).read()
         return re.search(r'^\s*unix\s*=\s*([^#\s]+)', conf, re.MULTILINE).groups()[0]
 
     def _send_command(self, command):
