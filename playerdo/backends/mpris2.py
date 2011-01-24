@@ -17,6 +17,7 @@ playback_status_levels = {
 
 
 PLAYER_OBJECT_NAME = "/org/mpris/MediaPlayer2"
+MAIN_INTERFACE_NAME = "org.mpris.MediaPlayer2"
 PLAYER_INTERFACE_NAME = "org.mpris.MediaPlayer2.Player"
 
 def get_sorted_candidate_buses():
@@ -44,10 +45,11 @@ class Mpris2Player(Player):
         try:
             l = get_sorted_candidate_buses()
             names = []
+
             for n in l:
                 try:
-                    bus = DBusObject(n, "/")
-                    names.append(bus.Identity())
+                    props = DBusProperties(n, PLAYER_OBJECT_NAME, MAIN_INTERFACE_NAME)
+                    names.append(props.get("Identity"))
                 except:
                     pass
 
