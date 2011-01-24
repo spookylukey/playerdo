@@ -5,6 +5,7 @@ Version 0.4
 -----------
 
 * Added support for MPRIS2 players
+* Added ``install_gnome`` command to help set up keyboard shortcuts on GNOME
 * Eliminated dependency on shc.hs for the shell-fm backend
 * Various bug fixes/optimisations
 

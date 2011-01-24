@@ -8,6 +8,8 @@ shortcuts.  This package is a solution to that problem.
 You can set up keyboard shortcuts to map the play/pause button to 'player_do
 playpause' etc, and player_do generally does the Right Thing.
 
+There is a command 'install_gnome' to help set up keyboard shortcuts on GNOME.
+
 The currently supported programs can be seen by running 'player_do help'.  To
 add more supported programs, see the existing code in the 'backends' directory.
 Patches gratefully received!
