@@ -118,3 +118,7 @@ class Player(object):
         Shows OSD (on screen display).
         """
         raise NotImplementedError
+
+    def __lt__(self, other):
+        # This is needed to stop errors on Python 3
+        return self.sort_order < other.sort_order

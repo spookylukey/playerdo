@@ -7,6 +7,11 @@ import sys
 
 KEYBINDINGS_PREFIX = "/desktop/gnome/keybindings"
 
+def force_unicode(s):
+    if type(s) is not unicode:
+        return s.decode('UTF-8')
+    else:
+        return s
 
 def install_gnome():
     """
@@ -42,6 +47,7 @@ def get_gnome_keybindings():
     if p.returncode != 0:
         raise Exception("Could not use gconftool to manipulate settings")
     retval = []
+    stdout = force_unicode(stdout)
     for x in stdout.split("\n"):
         x = x.strip()
         if x.startswith(KEYBINDINGS_PREFIX):
@@ -54,7 +60,7 @@ def get_gconf_val(key):
     stdout, stderr = p.communicate(None)
     if p.returncode != 0:
         raise Exception("Could not use gconftool to manipulate settings")
-    return stdout
+    return force_unicode(stdout)
 
 
 def set_gconf_val(key, val):
@@ -74,7 +80,7 @@ def install_action(keybinding_name, action, name):
 def launch_keybinding_editor():
     p = Popen(["which", "gnome-keybinding-properties"], stdout=PIPE)
     stdout, stderr = p.communicate(None)
-    val = stdout.strip()
+    val = force_unicode(stdout).strip()
     if val == "":
         raise Exception("Can't find program gnome-keybinding-properties to configure keys")
     call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
