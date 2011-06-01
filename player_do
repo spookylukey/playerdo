@@ -31,7 +31,7 @@ def usage(players):
     help += """
 Not all operations are supported or fully supported by all players.
 
-Currently supported players are:
+Currently supported players (in the order they will currently be used):
 """
     for p in players:
         n = getattr(p, 'friendly_name', None)
