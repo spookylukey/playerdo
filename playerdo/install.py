@@ -33,11 +33,11 @@ def install_gnome():
     n = max_count + 1
     for cmd in commands:
         action = "player_do " + cmd
-        name = "Player - " + cmd
+        name = "player_do - " + cmd
         if action not in already_installed:
             install_action("custom%d" % n, action, name)
             n += 1
-
+    sys.stdout.write("Launching keybinding editor...\nEdit 'player_do' keybindings in 'Custom shortcuts' section, and close when done.\n")
     launch_keybinding_editor()
 
 
