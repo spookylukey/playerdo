@@ -46,6 +46,7 @@ def print_usage(players):
 
 
 # List of commands: (name, docstring, callable)
+# The callable must accept a single argument, a list of players.
 commands = []
 
 for c in ["play", "pause", "unpause", "togglepause",
