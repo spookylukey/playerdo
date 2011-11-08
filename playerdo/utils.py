@@ -44,11 +44,14 @@ class DBusObject(object):
     to be specified once.
     """
 
-    def __init__(self, bus_name, object_name):
+    def __init__(self, bus_name, object_name, interface=None):
         import dbus
         bus = dbus.SessionBus()
         self._bus = bus
-        self._obj = bus.get_object(bus_name, object_name)
+        obj = bus.get_object(bus_name, object_name)
+        if interface is not None:
+            obj = dbus.Interface(obj, interface)
+        self._obj = obj
 
     def __getattr__(self, name):
         def f(*args, **kwargs):

@@ -5,6 +5,7 @@ Version 0.5
 -----------
 
 * Added support for quodlibet
+* Fixed support for Guayadeque
 
 Version 0.4
 -----------

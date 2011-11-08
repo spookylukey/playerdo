@@ -10,16 +10,23 @@ def get_all_mpris_buses():
             and not str(s).startswith('org.mpris.MediaPlayer2')]
 
 def get_sorted_candidate_buses():
+    import dbus
     candidates = get_all_mpris_buses()
     # Sort by status - playing = 0, paused = 1, stopped = 2
-    l = [(int(DBusObject(n, PLAYER_OBJECT_NAME).GetStatus()[0]), n)
-         for n in candidates]
+    l = []
+    for n in candidates:
+        try:
+            status = (int(DBusObject(n, PLAYER_OBJECT_NAME).GetStatus()[0]), n)
+        except dbus.exceptions.DBusException:
+            # probably 'unknown method', so we assume 'stopped'
+            status = (2, n)
+        l.append(status)
     l.sort()
     return [n for i, n in l]
 
 
 PLAYER_OBJECT_NAME = "/Player"
-
+MPRIS_INTERFACE_NAME = "org.freedesktop.MediaPlayer"
 
 class MprisPlayer(Player):
 
@@ -31,6 +38,7 @@ class MprisPlayer(Player):
 
     @property
     def friendly_name(self):
+        import dbus
         retval = self._friendly_name
         try:
             l = get_sorted_candidate_buses()
@@ -38,6 +46,9 @@ class MprisPlayer(Player):
             for n in l:
                 try:
                     bus = DBusObject(n, "/")
+                    names.append(bus.Identity())
+                except dbus.exceptions.DBusException:
+                    bus = DBusObject(n, "/", interface=MPRIS_INTERFACE_NAME)
                     names.append(bus.Identity())
                 except:
                     pass
@@ -72,7 +83,7 @@ class MprisPlayer(Player):
         try:
             return self._player
         except AttributeError:
-            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME)
+            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, interface=MPRIS_INTERFACE_NAME)
             self._player = obj
             return obj
 
@@ -92,10 +103,20 @@ class MprisPlayer(Player):
             return False
 
     def is_paused(self):
-        return self.player.GetStatus()[0] == 1
+        import dbus
+        try:
+            return self.player.GetStatus()[0] == 1
+        except dbus.exceptions.DBusException:
+            # Assume stopped, not paused, if doesn't support GetStatus
+            return False
 
     def is_stopped(self):
-        return self.player.GetStatus()[0] == 2
+        import dbus
+        try:
+            return self.player.GetStatus()[0] == 2
+        except dbus.exceptions.DBusException:
+            # Assume stopped if doesn't support GetStatus
+            return True
 
     def check_dependencies(self):
         retval = []
