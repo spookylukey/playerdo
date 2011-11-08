@@ -10,13 +10,26 @@ playpause' etc, and player_do generally does the Right Thing.
 
 There is a command 'install_gnome' to help set up keyboard shortcuts on GNOME.
 
-The currently supported programs can be seen by running 'player_do help'.  To
-add more supported programs, see the existing code in the 'backends' directory.
-Patches gratefully received!
+The currently supported programs can be seen by running 'player_do help'. Those
+that have been tested include the following:
 
-Many players support the MPRIS DBUS protocol, and will be supported without
-a specific backend.  If you only need support for those players, consider
-using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
+* Audacious
+* Amarok
+* Banshee
+* Clementine
+* Exaile
+* Guayadeque
+* moc
+* Quodlibet
+* Rhythmbox
+* shell-fm
+
+Many other players will be supported due to support for the MPRIS DBUS protocol,
+without a specific backend.  If you only need support for those players,
+consider using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
+
+To add more supported programs, see the existing code in the 'backends'
+directory.  Patches gratefully received!
 
 Source code: http://bitbucket.org/spookylukey/playerdo/src
 
