@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Version 0.5
+-----------
+
+* Added support for quodlibet
+
 Version 0.4
 -----------
 
