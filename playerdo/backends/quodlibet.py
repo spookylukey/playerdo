@@ -7,13 +7,13 @@ class Quodlibet(Player):
     friendly_name = "quodlibet"
 
     def is_running(self):
-        processes = process_stdout(["ps", "-A", "-o", "cmd"]).split("\n")
+        processes = process_stdout(["ps", "-A", "-o", "cmd"]).decode('ascii').split("\n")
         return len([p for p in processes
                 if (p.startswith("python")
                     and ("quodlibet" in p))]) > 0
 
     def is_paused(self):
-        return process_stdout(["quodlibet", "--status"]).strip().split(' ')[0:1] == ["paused"]
+        return process_stdout(["quodlibet", "--status"]).decode('ascii').strip().split(' ')[0:1] == ["paused"]
 
     def is_stopped(self):
         # Has no concept of 'stopped'
