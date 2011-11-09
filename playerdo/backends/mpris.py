@@ -38,7 +38,11 @@ class MprisPlayer(Player):
 
     @property
     def friendly_name(self):
-        import dbus
+        try:
+            import dbus
+        except ImportError:
+            return self._friendly_name
+
         retval = self._friendly_name
         try:
             l = get_sorted_candidate_buses()
