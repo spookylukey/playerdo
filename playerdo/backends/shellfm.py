@@ -18,7 +18,7 @@ class ShellFm(Player):
     def _send_command(self, command):
         s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         s.connect(self._socket_path())
-        s.send(command + "\n")
+        s.send((command + "\n").encode("ascii"))
         s.close()
 
     def is_stopped(self):
