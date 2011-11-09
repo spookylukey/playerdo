@@ -1,11 +1,14 @@
 from playerdo.backends.base import Player
-from playerdo.utils import process_retval, process_stdout
+from playerdo.utils import process_retval, process_stdout, program_running
 
 
 class Banshee(Player):
 
     process_name = "banshee-1"
     friendly_name = "Banshee"
+
+    def is_running(self):
+        return program_running("banshee-1") or program_running("banshee")
 
     def is_stopped(self):
         return process_stdout(["banshee", "--query-current-state"]).strip() \
