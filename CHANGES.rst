@@ -1,6 +1,12 @@
 Change log
 ==========
 
+Version 0.5.1
+-------------
+
+* Fixed some Python 3 incompatibilities
+* Fixed crash if DBus library is not installed
+
 Version 0.5
 -----------
 
