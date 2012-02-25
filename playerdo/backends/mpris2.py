@@ -83,7 +83,7 @@ class Mpris2Player(Player):
         try:
             return self._player
         except AttributeError:
-            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME)
+            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
             self._player = obj
             return obj
 
