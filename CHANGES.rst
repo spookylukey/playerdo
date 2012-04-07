@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Version 0.6
+-----------
+
+* Added support for cmus
+
 Version 0.5.2
 -------------
 

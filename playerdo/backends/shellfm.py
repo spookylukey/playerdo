@@ -1,25 +1,19 @@
 import os.path
 import re
-import socket
 
 from playerdo.backends.base import Player
+from playerdo.backends.socket import SocketPlayerMixin
 from playerdo.utils import process_retval, PlayerException
 
-class ShellFm(Player):
+class ShellFm(SocketPlayerMixin, Player):
 
     process_name = "shell-fm"
     friendly_name = "shell-fm"
 
-    def _socket_path(self):
+    def socket_path(self):
         rc_path = os.path.join(os.environ['HOME'], '.shell-fm', 'shell-fm.rc')
         conf = open(rc_path).read()
         return re.search(r'^\s*unix\s*=\s*([^#\s]+)', conf, re.MULTILINE).groups()[0]
-
-    def _send_command(self, command):
-        s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        s.connect(self._socket_path())
-        s.send((command + "\n").encode("ascii"))
-        s.close()
 
     def is_stopped(self):
         return not os.path.isfile(os.path.join(os.environ['HOME'],
@@ -41,13 +35,13 @@ class ShellFm(Player):
             raise PlayerException("Cannot play shell-fm when in a stopped state.")
 
     def pause(self):
-        self._send_command("pause")
+        self.send_socket_command("pause")
 
     def unpause(self):
         self.pause()
 
     def stop(self):
-        self._send_command("stop")
+        self.send_socket_command("stop")
 
     def next(self):
-        self._send_command("skip")
+        self.send_socket_command("skip")

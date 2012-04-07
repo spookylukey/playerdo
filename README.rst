@@ -17,6 +17,7 @@ that have been tested include the following:
 * Amarok
 * Banshee
 * Clementine
+* cmus
 * Exaile
 * Guayadeque
 * moc
