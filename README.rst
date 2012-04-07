@@ -23,6 +23,7 @@ that have been tested include the following:
 * Quodlibet
 * Rhythmbox
 * shell-fm
+* VLC (2.0 and later)
 
 Many other players will be supported due to support for the MPRIS DBUS protocol,
 without a specific backend.  If you only need support for those players,
