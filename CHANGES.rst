@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Version 0.6.1
+-------------
+
+* Fixed small bug introduced in 0.6
+
 Version 0.6
 -----------
 

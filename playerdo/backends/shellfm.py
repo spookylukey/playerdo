@@ -23,7 +23,7 @@ class ShellFm(SocketPlayerMixin, Player):
     def check_dependencies(self):
         retval = []
         try:
-            p = self._socket_path()
+            p = self.socket_path()
         except Exception:
             retval.append("Cannot find configuration file ~/.shell-fm/shell-fm.rc, or the 'unix' configuration item in that file.")
         return retval
