@@ -1,6 +1,9 @@
 from playerdo.backends.base import Player
 from playerdo.utils import DBusObject, DBusProperties
 
+# Note that dbus is not imported at module level, to allow the
+# check_dependencies functionality to be able to report the missing dbus
+# dependency rather than get an ImportError
 
 def get_all_mpris_buses():
     import dbus
