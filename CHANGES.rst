@@ -15,8 +15,7 @@ Version 0.5.2
 -------------
 
 * Fixed incorrect use of MPRIS2 protocol that caused VLC 2.0 to crash.
-  Thanks to Anonymous for the bug report and patch (tell me your name
-  if you want it here!).
+  Thanks to orbisvicis for the very helpful bug report and patch.
 
 Version 0.5.1
 -------------
