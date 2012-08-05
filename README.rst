@@ -1,17 +1,16 @@
+player_do provides a simple command line interface to control whatever media
+player is running on your computer.
 
-So you use several media players, sometimes at the same time (like 'shell-fm'
-running in a terminal, and something else with a GUI), and sometimes you like to
-try out new media players for a while. And you want the the media buttons on
-your keyboard to Do The Right Thing without having to reprogram keyboard
-shortcuts.  This package is a solution to that problem.
+It is designed to allow you to configure the media buttons on your keyboard
+(play, pause, next etc.) to Do The Right Thing without having to change anything
+if you switch to a different media player.
 
-You can set up keyboard shortcuts to map the play/pause button to 'player_do
-playpause' etc, and player_do generally does the Right Thing.
+It also includes a command 'install_gnome' to help set up keyboard shortcuts
+initially on GNOME. It can, however, be used with any system where you can map
+keyboard shortcuts to commands.
 
-There is a command 'install_gnome' to help set up keyboard shortcuts on GNOME.
-
-The currently supported programs can be seen by running 'player_do help'. Those
-that have been tested include the following:
+The currently supported media players can be seen by running 'player_do
+help'. Those that have been tested include the following:
 
 * Audacious
 * Amarok
