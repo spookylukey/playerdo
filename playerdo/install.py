@@ -77,10 +77,23 @@ def install_action(keybinding_name, action, name):
     sys.stdout.write("Keybinding slot for action '%s' created\n" % action)
 
 
+KEYBINDING_EDITOR_NAMES = ["gnome-keybinding-properties",
+                           "mate-keybinding-properties"]
+
 def launch_keybinding_editor():
-    p = Popen(["which", "gnome-keybinding-properties"], stdout=PIPE)
-    stdout, stderr = p.communicate(None)
-    val = force_unicode(stdout).strip()
-    if val == "":
-        raise Exception("Can't find program gnome-keybinding-properties to configure keys")
-    call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
+    errors = []
+    success = False
+    for prog in KEYBINDING_EDITOR_NAMES:
+        p = Popen(["which", prog], stdout=PIPE)
+        stdout, stderr = p.communicate(None)
+        val = force_unicode(stdout).strip()
+        if val == "":
+            continue
+        else:
+            call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
+            success = True
+            break
+    if not success:
+        sys.stdout.write("Error: Couldn't find a program for editing keybindings. Tried: %s\n"
+                         % ", ".join(KEYBINDING_EDITOR_NAMES))
+        raise SystemExit()
