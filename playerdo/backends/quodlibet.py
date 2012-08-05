@@ -7,7 +7,7 @@ class Quodlibet(Player):
     friendly_name = "quodlibet"
 
     def is_running(self):
-        processes = process_stdout(["ps", "-A", "-o", "cmd"]).decode('ascii').split("\n")
+        processes = process_stdout(["ps", "-A", "-o", "cmd"]).decode('ascii', errors="ignore").split("\n")
         return len([p for p in processes
                 if (p.startswith("python")
                     and ("quodlibet" in p))]) > 0
