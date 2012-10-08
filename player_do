@@ -63,7 +63,9 @@ commands.extend([
     ("test", "Tests that all dependencies are available.", do_test),
     ("help", "Prints help.", print_usage),
     ("install_gnome", "Install keybindings for GNOME and launch keybinding editor",
-     lambda *args: install.install_gnome())
+     lambda *args: install.install_gnome()),
+    ("install_mate", "Install keybindings for Mate and launch keybinding editor",
+     lambda *args: install.install_mate()),
 ])
 
 command_dict = dict((name, f) for name, doc, f in commands)

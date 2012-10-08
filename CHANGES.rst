@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Version 0.7
+-----------
+
+* Added support for installing shortcuts in Mate
+
 Version 0.6.1
 -------------
 

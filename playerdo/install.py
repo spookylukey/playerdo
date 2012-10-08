@@ -7,17 +7,15 @@ import sys
 
 KEYBINDINGS_PREFIX = "/desktop/gnome/keybindings"
 
+
 def force_unicode(s):
     if type(s) is not unicode:
         return s.decode('UTF-8')
     else:
         return s
 
-def install_gnome():
-    """
-    Creates stub keybindings for player_do commands in GNOME, and launches a GUI
-    editor for the user to set keys.
-    """
+
+def install_gnome_shortcuts():
     already_installed = set()
     max_count = 0
     for d in get_gnome_keybindings():
@@ -38,7 +36,24 @@ def install_gnome():
             install_action("custom%d" % n, action, name)
             n += 1
     sys.stdout.write("Launching keybinding editor...\nEdit 'player_do' keybindings in 'Custom shortcuts' section, and close when done.\n")
-    launch_keybinding_editor()
+
+
+def install_gnome():
+    """
+    Creates stub keybindings for player_do commands in GNOME, and launches a GUI
+    editor for the user to set keys.
+    """
+    install_gnome_shortcuts()
+    launch_keybinding_editor("gnome-keybinding-properties")
+
+
+def install_mate():
+    """
+    Creates stub keybindings for player_do commands in Mate, and launches a GUI
+    editor for the user to set keys.
+    """
+    install_gnome_shortcuts()
+    launch_keybinding_editor("mate-keybinding-properties")
 
 
 def get_gnome_keybindings():
@@ -77,23 +92,15 @@ def install_action(keybinding_name, action, name):
     sys.stdout.write("Keybinding slot for action '%s' created\n" % action)
 
 
-KEYBINDING_EDITOR_NAMES = ["gnome-keybinding-properties",
-                           "mate-keybinding-properties"]
-
-def launch_keybinding_editor():
+def launch_keybinding_editor(prog):
     errors = []
     success = False
-    for prog in KEYBINDING_EDITOR_NAMES:
-        p = Popen(["which", prog], stdout=PIPE)
-        stdout, stderr = p.communicate(None)
-        val = force_unicode(stdout).strip()
-        if val == "":
-            continue
-        else:
-            call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
-            success = True
-            break
+    p = Popen(["which", prog], stdout=PIPE)
+    stdout, stderr = p.communicate(None)
+    val = force_unicode(stdout).strip()
+    if val != "":
+        call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
+        success = True
     if not success:
-        sys.stdout.write("Error: Couldn't find a program for editing keybindings. Tried: %s\n"
-                         % ", ".join(KEYBINDING_EDITOR_NAMES))
+        sys.stdout.write("Error: Couldn't find program %s for editing keybindings.\n" % prog)
         raise SystemExit()
