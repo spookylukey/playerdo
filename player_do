@@ -62,10 +62,12 @@ for c in ["play", "pause", "unpause", "togglepause",
 commands.extend([
     ("test", "Tests that all dependencies are available.", do_test),
     ("help", "Prints help.", print_usage),
-    ("install_gnome", "Install keybindings for GNOME and launch keybinding editor",
+    ("install_gnome", "Install keybindings for GNOME2 and launch keybinding editor",
      lambda *args: install.install_gnome()),
     ("install_mate", "Install keybindings for Mate and launch keybinding editor",
      lambda *args: install.install_mate()),
+    ("install_gnome3", "Install keybindings for GNOME3, Cinnamon and launch keybinding editor",
+     lambda *args: install.install_gnome3()),
 ])
 
 command_dict = dict((name, f) for name, doc, f in commands)
