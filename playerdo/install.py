@@ -46,7 +46,6 @@ class SettingsInstallerBase(object):
         p = Popen(["which", self.KEYBINDINGS_GUI_EDITOR], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         val = force_unicode(stdout).strip() + " " + " ".join(self.KEYBINDINGS_GUI_EDITOR_ARGS)
-        print val
         if val != "":
             call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
             success = True
