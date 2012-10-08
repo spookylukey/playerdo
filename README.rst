@@ -6,7 +6,7 @@ It is designed to allow you to configure the media buttons on your keyboard
 if you switch to a different media player.
 
 It also includes commands 'install_gnome','install_mate', and 'install_gnome3'
-to help set up keyboard shortcuts initially on GNOME/Mate/GNOME3/Cinnamon. It
+to help set up keyboard shortcuts initially on GNOME2/Mate/GNOME3/Cinnamon. It
 can, however, be used with any system where you can map keyboard shortcuts to
 commands.
 

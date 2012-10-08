@@ -4,7 +4,7 @@ Change log
 Version 0.7
 -----------
 
-* Added support for installing shortcuts in Mate and GNOME3
+* Added support for installing shortcuts in Mate and GNOME3/Cinnamon
 
 Version 0.6.1
 -------------
