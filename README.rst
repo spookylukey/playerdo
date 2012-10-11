@@ -23,7 +23,7 @@ help'. Those that have been tested include the following:
 * moc
 * Quodlibet
 * Rhythmbox
-* shell-fm
+* shell-fm (0.8 and later)
 * VLC (2.0 and later)
 
 Many other players will be supported due to support for the MPRIS DBUS protocol,

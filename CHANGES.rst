@@ -1,6 +1,12 @@
 Change log
 ==========
 
+Version 0.8
+-----------
+
+* new command 'is_playing'.
+* shell-fm support now requires version 0.8
+
 Version 0.7
 -----------
 

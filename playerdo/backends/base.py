@@ -119,6 +119,11 @@ class Player(object):
         """
         raise NotImplementedError
 
+    def is_playing(self):
+        """
+        Returns True if the player is playing a song, False otherwise.
+        """
+
     def __lt__(self, other):
         # This is needed to stop errors on Python 3
         return self.sort_order < other.sort_order

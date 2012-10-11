@@ -18,6 +18,10 @@ class Banshee(Player):
         return process_stdout(["banshee", "--query-current-state"]).strip() \
             ==  "current-state: paused"
 
+    def is_playing(self):
+        return process_stdout(["banshee", "--query-current-state"]).strip() \
+            ==  "current-state: playing"
+
     def play(self):
         process_retval(["banshee", "--play"])
 

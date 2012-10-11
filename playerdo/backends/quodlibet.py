@@ -19,6 +19,9 @@ class Quodlibet(Player):
         # Has no concept of 'stopped'
         return self.is_paused()
 
+    def is_playing(self):
+        return process_stdout(["quodlibet", "--status"]).decode('ascii').strip().split(' ')[0:1] == ["playing"]
+
     def play(self):
         process_retval(["quodlibet", "--play"])
 

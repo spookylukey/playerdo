@@ -19,6 +19,9 @@ class Cmus(SocketPlayerMixin, Player):
     def is_paused(self):
         return 'status paused' in self.send_socket_command('status', receive=10000)
 
+    def is_playing(self):
+        return 'status playing' in self.send_socket_command('status', receive=10000)
+
     def play(self):
         self.send_socket_command('player-play')
 

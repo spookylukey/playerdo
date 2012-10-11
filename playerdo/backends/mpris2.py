@@ -115,6 +115,9 @@ class Mpris2Player(Player):
     def is_stopped(self):
         return self._playback_status() == "Stopped"
 
+    def is_playing(self):
+        return self._playback_status() == "Playing"
+
     def check_dependencies(self):
         retval = []
         try:

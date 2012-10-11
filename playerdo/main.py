@@ -70,8 +70,7 @@ def do_command(command, players):
 
         # Use the first one
         try:
-            player.do_command(command)
-            return
+            return player.do_command(command)
         except NotImplementedError:
             sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
                              (command, player.friendly_name))
@@ -81,6 +80,14 @@ def do_command(command, players):
             sys.exit(1)
     sys.stderr.write("No players running!\n")
     sys.exit(1)
+
+
+def is_playing(players):
+    retval = do_command("is_playing", players)
+    if retval:
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 
 def find_players():

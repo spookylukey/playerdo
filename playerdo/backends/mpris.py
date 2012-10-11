@@ -125,6 +125,14 @@ class MprisPlayer(Player):
             # Assume stopped if doesn't support GetStatus
             return True
 
+    def is_playing(self):
+        import dbus
+        try:
+            return self.player.GetStatus()[0] == 0
+        except dbus.exceptions.DBusException:
+            # Assume stopped, not playing, if doesn't support GetStatus
+            return False
+
     def check_dependencies(self):
         retval = []
         try:

@@ -8,7 +8,7 @@
 # determined.
 #
 
-from playerdo.main import do_test, do_command, find_players
+from playerdo.main import do_test, do_command, find_players, is_playing
 from playerdo.backends.base import Player
 from playerdo import install
 import sys
@@ -60,6 +60,7 @@ for c in ["play", "pause", "unpause", "togglepause",
                      mk_command(c)))
 
 commands.extend([
+    ("is_playing", "Exits status 0 if a player is playing, otherwise 1", is_playing),
     ("test", "Tests that all dependencies are available.", do_test),
     ("help", "Prints help.", print_usage),
     ("install_gnome", "Install keybindings for GNOME2 and launch keybinding editor",

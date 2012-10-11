@@ -12,6 +12,7 @@ class RhythmBox(Player):
         return False
 
     # is_paused - no way to know
+    # is_playing - no way to know
 
     def play(self):
         process_retval(["rhythmbox-client", "--play"])
