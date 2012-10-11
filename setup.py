@@ -65,5 +65,3 @@ try:
     import dbus
 except ImportError:
     sys.stderr.write("WARNING: Python 'dbus' library is not installed. Some backends will not work.\n")
-    if sys.version_info >= (3,):
-        sys.stderr.write("At the time of writing, a Python 3 dbus library is only available if you build the py3k branch available at http://cgit.freedesktop.org/dbus/dbus-python/ \n")
