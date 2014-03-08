@@ -5,10 +5,10 @@ It is designed to allow you to configure the media buttons on your keyboard
 (play, pause, next etc.) to Do The Right Thing without having to change anything
 if you switch to a different media player.
 
-It also includes commands 'install_gnome','install_mate', and 'install_gnome3'
-to help set up keyboard shortcuts initially on GNOME2/Mate/GNOME3/Cinnamon. It
-can, however, be used with any system where you can map keyboard shortcuts to
-commands.
+It also includes commands 'install_gnome','install_mate', 'install_gnome3', and
+'install_cinnamon' to help set up keyboard shortcuts initially on
+GNOME2/Mate/GNOME3/Cinnamon. It can, however, be used with any system where you
+can map keyboard shortcuts to commands.
 
 The currently supported media players can be seen by running 'player_do
 help'. Those that have been tested include the following:
