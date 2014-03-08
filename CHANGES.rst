@@ -1,6 +1,11 @@
 Change log
 ==========
 
+Version 0.9
+-----------
+
+* New 'install_cinnamon' command to properly support Cinnamon 2.0 and higher.
+
 Version 0.8
 -----------
 
