@@ -5,6 +5,7 @@ Version 0.9
 -----------
 
 * New 'install_cinnamon' command to properly support Cinnamon 2.0 and higher.
+* Fixed some Python 3 compatibility issues, dropped support for Python < 2.7
 
 Version 0.8
 -----------

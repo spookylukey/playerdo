@@ -39,7 +39,7 @@ def sort_players(players):
         states.append(state)
         orders.append(p.sort_order)
 
-    l = zip(states, orders, players)
+    l = list(zip(states, orders, players))
     l.sort()
 
     return [x[2] for x in l]
@@ -75,7 +75,7 @@ def do_command(command, players):
             sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
                              (command, player.friendly_name))
             sys.exit(1)
-        except PlayerException, e:
+        except PlayerException as e:
             sys.stderr.write(e.message + "\n")
             sys.exit(1)
     sys.stderr.write("No players running!\n")

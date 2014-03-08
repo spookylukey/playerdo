@@ -5,6 +5,10 @@ from subprocess import Popen, PIPE, call
 import sys
 
 
+if sys.version_info.major > 2:
+    unicode = str
+
+
 def force_unicode(s):
     if type(s) is not unicode:
         return s.decode('UTF-8')
