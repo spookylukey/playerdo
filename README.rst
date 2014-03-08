@@ -33,6 +33,8 @@ consider using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
 To add more supported programs, see the existing code in the 'backends'
 directory.  Patches gratefully received!
 
+Download: https://pypi.python.org/pypi/playerdo
+
 Source code: http://bitbucket.org/spookylukey/playerdo/src
 
 Bug tracking: http://bitbucket.org/spookylukey/playerdo/issues
