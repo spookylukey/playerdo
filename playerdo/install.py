@@ -110,24 +110,17 @@ class MateSettingsInstaller(Gnome2SettingsInstallerBase):
     KEYBINDINGS_GUI_EDITOR = "mate-keybinding-properties"
 
 
-class Gnome3SettingsInstaller(SettingsInstallerBase):
+class Gnome3SettingsInstallerBase(SettingsInstallerBase):
+    """
+    Common functionality between Gnome3 and Cinnamon
+    """
     CONF_TOOL = "gsettings"
-    KEYBINDINGS_GUI_EDITOR = "gnome-control-center"
-    KEYBINDINGS_GUI_EDITOR_ARGS = ["keyboard"]
-
-    KEYBINDINGS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
-    KEYBINDINGS_LIST_CUSTOM_KEY = "custom-keybindings"
-    KEYBINDINGS_SCHEMA_CUSTOM = "org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
-    KEYBINDINGS_CUSTOM_KEY_PATH = '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/'
 
     def get_custom_keybindings(self):
         l = self.get_gsettings_val(self.KEYBINDINGS_SCHEMA, None, self.KEYBINDINGS_LIST_CUSTOM_KEY)
         retval = []
         for i in l:
-            assert i.startswith(self.KEYBINDINGS_CUSTOM_KEY_PATH)
-            val = i.split('/')[-2]
-            assert val.startswith('custom')
-            retval.append(val)
+            retval.append(self.get_custom_keybinding_working_name(i))
         return retval
 
     def get_keybinding_action(self, keybinding_name):
@@ -135,25 +128,26 @@ class Gnome3SettingsInstaller(SettingsInstallerBase):
                                       self.keybinding_path(keybinding_name),
                                       "command")
 
-    def keybinding_path(self, name):
-        return self.KEYBINDINGS_CUSTOM_KEY_PATH + name + '/'
-
     def install_keybinding(self, keybinding_name, action, display_name):
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                              self.keybinding_path(keybinding_name), "command", action)
+                               self.keybinding_path(keybinding_name), "command", action)
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                              self.keybinding_path(keybinding_name), "name", display_name)
+                               self.keybinding_path(keybinding_name), "name", display_name)
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                              self.keybinding_path(keybinding_name), "binding", "")
+                               self.keybinding_path(keybinding_name), "binding", "")
 
         # Update the list key
         l = self.get_custom_keybindings() # list like ['custom0', 'custom1']
         l.append(keybinding_name)
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA, None,
                                self.KEYBINDINGS_LIST_CUSTOM_KEY,
-                               [self.keybinding_path(n) for n in l]
+                               [self.get_custom_keybinding_stored_value(n) for n in l]
                                )
+
         sys.stdout.write("Keybinding slot for action '%s' created\n" % action)
+
+    def keybinding_path(self, name):
+        return self.KEYBINDINGS_CUSTOM_KEY_PATH + name + '/'
 
     def get_gsettings_val(self, schema, path, key):
         arg = schema
@@ -175,6 +169,52 @@ class Gnome3SettingsInstaller(SettingsInstallerBase):
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
             raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+
+    def get_custom_keybinding_working_name(self, stored_value):
+        raise NotImplementedError()
+
+    def get_custom_keybinding_stored_value(self, working_name):
+        raise NotImplementedError()
+
+
+class Gnome3SettingsInstaller(Gnome3SettingsInstallerBase):
+    KEYBINDINGS_GUI_EDITOR = "gnome-control-center"
+    KEYBINDINGS_GUI_EDITOR_ARGS = ["keyboard"]
+
+    KEYBINDINGS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
+    KEYBINDINGS_LIST_CUSTOM_KEY = "custom-keybindings"
+    KEYBINDINGS_SCHEMA_CUSTOM = "org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
+    KEYBINDINGS_CUSTOM_KEY_PATH = '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/'
+
+    # Gnome3 stores
+    # ['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/'...]
+    # in the 'custom-keybindings' key
+
+    def get_custom_keybinding_working_name(self, stored_value):
+        assert stored_value.startswith(self.KEYBINDINGS_CUSTOM_KEY_PATH)
+        val = stored_value.split('/')[-2]
+        assert val.startswith('custom')
+        return val
+
+    def get_custom_keybinding_stored_value(self, name):
+        return self.keybinding_path(name)
+
+
+class CinnamonSettingsInstaller(Gnome3SettingsInstallerBase):
+    KEYBINDINGS_GUI_EDITOR = "cinnamon-settings"
+    KEYBINDINGS_GUI_EDITOR_ARGS = ["keyboard"]
+
+    KEYBINDINGS_SCHEMA = "org.cinnamon.keybindings"
+    KEYBINDINGS_LIST_CUSTOM_KEY = "custom-list"
+    KEYBINDINGS_SCHEMA_CUSTOM = "org.cinnamon.keybindings.custom-keybinding"
+    KEYBINDINGS_CUSTOM_KEY_PATH = "/org/cinnamon/keybindings/custom-keybindings/"
+
+    # Cinnamon just stores 'custom0', 'custom1' in the 'custom-list' key
+    def get_custom_keybinding_working_name(self, stored_value):
+        return stored_value
+
+    def get_custom_keybinding_stored_value(self, name):
+        return name
 
 
 def decode_gsettings(v):
@@ -199,4 +239,4 @@ def mk_installer(cls):
 install_gnome = mk_installer(Gnome2SettingsInstaller)
 install_mate = mk_installer(MateSettingsInstaller)
 install_gnome3 = mk_installer(Gnome3SettingsInstaller)
-
+install_cinnamon = mk_installer(CinnamonSettingsInstaller)

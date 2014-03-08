@@ -67,8 +67,10 @@ commands.extend([
      lambda *args: install.install_gnome()),
     ("install_mate", "Install keybindings for Mate and launch keybinding editor",
      lambda *args: install.install_mate()),
-    ("install_gnome3", "Install keybindings for GNOME3, Cinnamon and launch keybinding editor",
+    ("install_gnome3", "Install keybindings for GNOME3 and launch keybinding editor",
      lambda *args: install.install_gnome3()),
+    ("install_cinnamon", "Install keybindings for Cinnamon and launch keybinding editor",
+     lambda *args: install.install_cinnamon()),
 ])
 
 command_dict = dict((name, f) for name, doc, f in commands)
