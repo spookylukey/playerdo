@@ -6,4 +6,5 @@ from playerdo.backends.mpris import *
 from playerdo.backends.mpris2 import *
 from playerdo.backends.banshee import *
 from playerdo.backends.quodlibet import *
+from playerdo.backends.pianobar import *
 

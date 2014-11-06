@@ -21,6 +21,7 @@ help'. Those that have been tested include the following:
 * Exaile
 * Guayadeque
 * moc
+* pianobar
 * Quodlibet
 * Rhythmbox
 * shell-fm (0.8 and later)
