@@ -138,7 +138,7 @@ class Gnome3SettingsInstallerBase(SettingsInstallerBase):
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
                                self.keybinding_path(keybinding_name), "name", display_name)
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                               self.keybinding_path(keybinding_name), "binding", "")
+                               self.keybinding_path(keybinding_name), "binding", self.empty_binding_val())
 
         # Update the list key
         l = self.get_custom_keybindings() # list like ['custom0', 'custom1']
@@ -203,15 +203,15 @@ class Gnome3SettingsInstaller(Gnome3SettingsInstallerBase):
     def get_custom_keybinding_stored_value(self, name):
         return self.keybinding_path(name)
 
+    def empty_binding_val(self):
+        return ""
 
-class CinnamonSettingsInstaller(Gnome3SettingsInstallerBase):
+
+class CinnamonSettingsInstallerBase(Gnome3SettingsInstallerBase):
     KEYBINDINGS_GUI_EDITOR = "cinnamon-settings"
     KEYBINDINGS_GUI_EDITOR_ARGS = ["keyboard"]
 
-    KEYBINDINGS_SCHEMA = "org.cinnamon.keybindings"
     KEYBINDINGS_LIST_CUSTOM_KEY = "custom-list"
-    KEYBINDINGS_SCHEMA_CUSTOM = "org.cinnamon.keybindings.custom-keybinding"
-    KEYBINDINGS_CUSTOM_KEY_PATH = "/org/cinnamon/keybindings/custom-keybindings/"
 
     # Cinnamon just stores 'custom0', 'custom1' in the 'custom-list' key
     def get_custom_keybinding_working_name(self, stored_value):
@@ -219,6 +219,37 @@ class CinnamonSettingsInstaller(Gnome3SettingsInstallerBase):
 
     def get_custom_keybinding_stored_value(self, name):
         return name
+
+class Cinnamon1SettingsInstaller(CinnamonSettingsInstallerBase):
+    KEYBINDINGS_SCHEMA = "org.cinnamon.keybindings"
+    KEYBINDINGS_SCHEMA_CUSTOM = "org.cinnamon.keybindings.custom-keybinding"
+    KEYBINDINGS_CUSTOM_KEY_PATH = "/org/cinnamon/keybindings/custom-keybindings/"
+
+    def empty_binding_val(self):
+        return ""
+
+
+class Cinnamon2SettingsInstaller(CinnamonSettingsInstallerBase):
+    KEYBINDINGS_SCHEMA = "org.cinnamon.desktop.keybindings"
+    KEYBINDINGS_SCHEMA_CUSTOM = "org.cinnamon.desktop.keybindings.custom-keybinding"
+    KEYBINDINGS_CUSTOM_KEY_PATH = "/org/cinnamon/desktop/keybindings/custom-keybindings/"
+
+    def empty_binding_val(self):
+        return []
+
+
+class CinnamonSettingsInstaller(object):
+    installers = [Cinnamon1SettingsInstaller(), Cinnamon2SettingsInstaller()]
+
+    def install_shortcuts(self):
+        # This does both Cinnamon 1 and Cinnamon 2, which should cover our
+        # bases.
+        for i in self.installers:
+            i.install_shortcuts()
+
+    def launch_keybinding_editor(self):
+        # They do the same thing, either will do
+        self.installers[0].launch_keybinding_editor()
 
 
 def decode_gsettings(v):
