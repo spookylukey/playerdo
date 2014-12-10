@@ -45,7 +45,6 @@ class SettingsInstallerBase(object):
 
     def launch_keybinding_editor(self):
         sys.stdout.write("Launching keybinding editor...\nEdit 'player_do' keybindings in 'Custom shortcuts' section, and close when done.\n")
-        errors = []
         success = False
         p = Popen(["which", self.KEYBINDINGS_GUI_EDITOR], stdout=PIPE)
         stdout, stderr = p.communicate(None)
