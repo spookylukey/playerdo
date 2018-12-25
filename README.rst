@@ -23,7 +23,7 @@ help'. Those that have been tested include the following:
 * moc
 * pianobar
 * Quodlibet
-* Rhythmbox
+* Rhythmbox (needs MPRIS plugin installed and enabled)
 * shell-fm (0.8 and later)
 * VLC (2.0 and later)
 
