@@ -1,6 +1,8 @@
 from playerdo.backends.base import Player
 from playerdo.utils import process_retval
 
+# TODO - it only works with MPRIS interface now,
+# and that works better than this custom one (probably?)
 
 class RhythmBox(Player):
 
