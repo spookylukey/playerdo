@@ -21,6 +21,7 @@ help'. Those that have been tested include the following:
 * Exaile
 * Guayadeque
 * moc
+* MPD (configurable using MPD_HOST and MPD_PORT environment variables like mpc)
 * pianobar
 * Quodlibet
 * Rhythmbox
