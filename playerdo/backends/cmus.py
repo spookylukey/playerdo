@@ -3,7 +3,7 @@ import os.path
 
 from playerdo.backends.base import Player
 from playerdo.backends.socket import UnixSocketPlayerMixin
-from playerdo.utils import process_retval, PlayerException
+from playerdo.utils import process_retval, BackendBrokenException
 
 class Cmus(UnixSocketPlayerMixin, Player):
 
@@ -11,7 +11,13 @@ class Cmus(UnixSocketPlayerMixin, Player):
     friendly_name = "cmus"
 
     def socket_path(self):
-        return os.path.join(os.environ['HOME'], '.cmus', 'socket')
+        for f in [
+                os.path.join(os.environ['XDG_RUNTIME_DIR'], 'cmus-socket'),
+                os.path.join(os.environ['HOME'], '.cmus', 'socket'),
+        ]:
+            if os.path.exists(f):
+                return f
+        raise BackendBrokenException("cmus is running, but its socket is not found")
 
     def is_stopped(self):
         return 'status stopped' in self.send_socket_command('status', receive=10000)
