@@ -2,10 +2,10 @@ import os.path
 import re
 
 from playerdo.backends.base import Player
-from playerdo.backends.socket import SocketPlayerMixin
+from playerdo.backends.socket import UnixSocketPlayerMixin
 from playerdo.utils import process_retval, PlayerException
 
-class ShellFm(SocketPlayerMixin, Player):
+class ShellFm(UnixSocketPlayerMixin, Player):
 
     process_name = "shell-fm"
     friendly_name = "shell-fm"

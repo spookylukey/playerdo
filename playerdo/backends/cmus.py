@@ -2,10 +2,10 @@ import os
 import os.path
 
 from playerdo.backends.base import Player
-from playerdo.backends.socket import SocketPlayerMixin
+from playerdo.backends.socket import UnixSocketPlayerMixin
 from playerdo.utils import process_retval, PlayerException
 
-class Cmus(SocketPlayerMixin, Player):
+class Cmus(UnixSocketPlayerMixin, Player):
 
     process_name = "cmus"
     friendly_name = "cmus"

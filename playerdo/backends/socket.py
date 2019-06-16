@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import socket
 
-class SocketPlayerMixin(object):
+class UnixSocketPlayerMixin(object):
 
     def send_socket_command(self, command, receive=0):
         s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
