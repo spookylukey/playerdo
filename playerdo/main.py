@@ -1,6 +1,6 @@
 from playerdo.backends import *
 from playerdo.backends.base import Player
-from playerdo.utils import PlayerException
+from playerdo.utils import PlayerException, BackendBrokenException
 import sys
 
 
@@ -15,7 +15,7 @@ def sort_players(players):
         running = False
         try:
             running = p.is_running()
-        except NotImplementedError:
+        except (NotImplementedError, BackendBrokenException):
             running = False
 
         if not running:
@@ -23,7 +23,7 @@ def sort_players(players):
         else:
             try:
                 is_stopped = p.is_stopped()
-            except NotImplementedError:
+            except (NotImplementedError, BackendBrokenException):
                 is_stopped = None
 
             if is_stopped == True:

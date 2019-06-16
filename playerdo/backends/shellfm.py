@@ -2,10 +2,10 @@ import os.path
 import re
 
 from playerdo.backends.base import Player
-from playerdo.backends.socket import SocketPlayerMixin
+from playerdo.backends.socket import UnixSocketPlayerMixin
 from playerdo.utils import process_retval, PlayerException
 
-class ShellFm(SocketPlayerMixin, Player):
+class ShellFm(UnixSocketPlayerMixin, Player):
 
     process_name = "shell-fm"
     friendly_name = "shell-fm"
@@ -17,7 +17,7 @@ class ShellFm(SocketPlayerMixin, Player):
 
     def _get_status(self):
         # This only works with shell-fm 0.8 and greater
-        return self.send_socket_command("status", receive=10000).strip()
+        return self.send_socket_command("status").strip()
 
     def is_stopped(self):
         return self._get_status() == "STOPPED"

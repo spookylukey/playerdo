@@ -95,3 +95,13 @@ class PlayerException(Exception):
 
     def __init__(self, message):
         self.message = message
+
+
+class BackendBrokenException(Exception):
+    """
+    An exception that is used when a backend breaks, that
+    will be caught to stop the backend breaking everything for
+    all the others.
+    """
+    def __init__(self, message):
+        self.message = message

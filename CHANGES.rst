@@ -1,6 +1,17 @@
 Change log
 ==========
 
+Version 1.1 (under development)
+-----------
+* Fixed support for cmus
+* Added support for MPD.
+
+Version 1.0
+-----------
+
+* Support for pianobar
+* Better support for Cinnamon
+
 Version 0.9
 -----------
 
