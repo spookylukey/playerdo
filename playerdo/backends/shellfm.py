@@ -17,7 +17,7 @@ class ShellFm(UnixSocketPlayerMixin, Player):
 
     def _get_status(self):
         # This only works with shell-fm 0.8 and greater
-        return self.send_socket_command("status", receive=10000).strip()
+        return self.send_socket_command("status").strip()
 
     def is_stopped(self):
         return self._get_status() == "STOPPED"

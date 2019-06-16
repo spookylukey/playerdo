@@ -20,13 +20,13 @@ class Cmus(UnixSocketPlayerMixin, Player):
         raise BackendBrokenException("cmus is running, but its socket is not found")
 
     def is_stopped(self):
-        return 'status stopped' in self.send_socket_command('status', receive=10000)
+        return 'status stopped' in self.send_socket_command('status')
 
     def is_paused(self):
-        return 'status paused' in self.send_socket_command('status', receive=10000)
+        return 'status paused' in self.send_socket_command('status')
 
     def is_playing(self):
-        return 'status playing' in self.send_socket_command('status', receive=10000)
+        return 'status playing' in self.send_socket_command('status')
 
     def play(self):
         self.send_socket_command('player-play')
