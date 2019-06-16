@@ -1,8 +1,8 @@
 Change log
 ==========
 
-Version 1.0
------------
+Version 1.0 (2019-06-16)
+------------------------
 
 * Support for pianobar
 * Support for MPD.
