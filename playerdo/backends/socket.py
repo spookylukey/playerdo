@@ -26,10 +26,10 @@ class SocketPlayerBase(object):
         return s
 
     def create_socket(self):
-        raise NotImplentedError()
+        raise NotImplementedError()
 
     def connect_socket(self, socket):
-        raise NotImplentedError()
+        raise NotImplementedError()
 
 
 class TcpSocketPlayerMixin(SocketPlayerBase):

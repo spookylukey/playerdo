@@ -3,8 +3,10 @@ from setuptools import setup, find_packages
 import os
 import sys
 
+
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
 
 extra = {}
 if sys.version_info >= (3,):
@@ -22,26 +24,27 @@ if sys.version_info >= (3,):
     # Monkey patch:
     distutils.util.Mixin2to3.fixer_names = fixer_names
 
+
 setup(
-    name = "playerdo",
-    version = "1.0",
-    packages = find_packages(),
-    include_package_data = True,
-    scripts = ['player_do'],
+    name="playerdo",
+    version="1.0",
+    packages=find_packages(),
+    include_package_data=True,
+    scripts=['player_do'],
 
     # metadata for upload to PyPI
-    author = "Luke Plant",
-    author_email = "L.Plant.98@cantab.net",
-    description = "Control various media players from a single command line interface.",
-    long_description = (
-                        read('README.rst')
-                        + "\n\n" +
-                        read('CHANGES.rst')
+    author="Luke Plant",
+    author_email="L.Plant.98@cantab.net",
+    description="Control various media players from a single command line interface.",
+    long_description=(
+        read('README.rst')
+        + "\n\n" +
+        read('CHANGES.rst')
     ),
-    license = "BSD",
-    keywords = "music media MPRIS player command interface wrapper",
-    url = "http://bitbucket.org/spookylukey/playerdo",
-    classifiers = [
+    license="BSD",
+    keywords="music media MPRIS player command interface wrapper",
+    url="http://bitbucket.org/spookylukey/playerdo",
+    classifiers=[
         "Topic :: Multimedia :: Sound/Audio :: Players",
         "License :: OSI Approved :: BSD License",
         "Development Status :: 4 - Beta",
@@ -60,6 +63,6 @@ setup(
 
 # dbus isn't on PyPI, can't just put it in requirements
 try:
-    import dbus
+    import dbus  # noqa
 except ImportError:
     sys.stderr.write("WARNING: Python 'dbus' library is not installed. Some backends will not work.\n")
