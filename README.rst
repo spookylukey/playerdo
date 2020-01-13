@@ -35,6 +35,36 @@ consider using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
 To add more supported programs, see the existing code in the 'backends'
 directory.  Patches gratefully received!
 
+Installation
+------------
+
+You can use pip to install::
+
+    pip install playerdo
+
+However, we recommend the use of `pipx <https://pypi.org/project/pipx/>`_
+(Python 3 only) to install it into its own virtualenv::
+
+    pipx install playerdo --system-site-packages
+
+You may also need to install Python DBUS bindings. We recommend doing this at
+the system level. On Debian-like systems this is usually done with one of the
+following packages::
+
+      python-dbus
+      python3-dbus
+
+Usage
+-----
+
+::
+
+    player_do --help
+
+
+
+Links
+-----
 Download: https://pypi.python.org/pypi/playerdo
 
 Source code: https://github.com/spookylukey/playerdo
