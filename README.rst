@@ -37,6 +37,6 @@ directory.  Patches gratefully received!
 
 Download: https://pypi.python.org/pypi/playerdo
 
-Source code: http://bitbucket.org/spookylukey/playerdo/src
+Source code: https://github.com/spookylukey/playerdo
 
-Bug tracking: http://bitbucket.org/spookylukey/playerdo/issues
+Bug tracking: https://github.com/spookylukey/playerdo/issues
