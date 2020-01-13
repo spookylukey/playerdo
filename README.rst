@@ -38,12 +38,12 @@ directory.  Patches gratefully received!
 Installation
 ------------
 
-You can use pip to install::
+You need Python 3. You can use pip to install::
 
     pip install playerdo
 
-However, we recommend the use of `pipx <https://pypi.org/project/pipx/>`_
-(Python 3 only) to install it into its own virtualenv::
+However, we recommend the use of `pipx <https://pypi.org/project/pipx/>`_ to
+install it into its own virtualenv::
 
     pipx install playerdo --system-site-packages
 
