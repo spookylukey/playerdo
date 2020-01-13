@@ -5,12 +5,8 @@ from subprocess import Popen, PIPE, call
 import sys
 
 
-if sys.version_info.major > 2:
-    unicode = str
-
-
 def force_unicode(s):
-    if type(s) is not unicode:
+    if type(s) is not str:
         return s.decode('UTF-8')
     else:
         return s
@@ -140,7 +136,7 @@ class Gnome3SettingsInstallerBase(SettingsInstallerBase):
                                self.keybinding_path(keybinding_name), "binding", self.empty_binding_val())
 
         # Update the list key
-        l = self.get_custom_keybindings() # list like ['custom0', 'custom1']
+        l = self.get_custom_keybindings()  # list like ['custom0', 'custom1']
         l.append(keybinding_name)
         self.set_gsettings_val(self.KEYBINDINGS_SCHEMA, None,
                                self.KEYBINDINGS_LIST_CUSTOM_KEY,

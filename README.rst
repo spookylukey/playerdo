@@ -70,3 +70,5 @@ Download: https://pypi.python.org/pypi/playerdo
 Source code: https://github.com/spookylukey/playerdo
 
 Bug tracking: https://github.com/spookylukey/playerdo/issues
+
+Changes: https://github.com/spookylukey/playerdo/blob/master/CHANGES.rst

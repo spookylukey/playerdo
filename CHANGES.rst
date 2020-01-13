@@ -1,6 +1,12 @@
 Change log
 ==========
 
+Version 2.0 (2020-01-13)
+------------------------
+* Dropped Python 2 support
+* Fixed some Python 3 issues
+
+
 Version 1.0 (2019-06-16)
 ------------------------
 
