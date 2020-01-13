@@ -10,7 +10,10 @@ class SocketPlayerBase(object):
         # We never know how much to receive, most of these
         # protocols send very little data back for the commands
         # we use.
-        return s.recv(2048)
+        # It's also easier to write both Python 2 and 3 compatible
+        # if we convert to unicode strings everywhere.
+        # Usually we are getting back ASCII.
+        return s.recv(2048).decode('utf-8')
 
     def get_open_socket(self):
         if hasattr(self, '_socket'):

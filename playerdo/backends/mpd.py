@@ -5,6 +5,7 @@ from playerdo.backends.base import Player
 from playerdo.backends.socket import TcpSocketPlayerMixin
 from playerdo.utils import program_running
 
+
 class Mpd(TcpSocketPlayerMixin, Player):
 
     friendly_name = "mpd"
