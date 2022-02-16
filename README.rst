@@ -27,6 +27,7 @@ help'. Those that have been tested include the following:
 * Rhythmbox (needs MPRIS plugin installed and enabled)
 * shell-fm (0.8 and later)
 * VLC (2.0 and later)
+* Firefox, Chrome (when playing some media like videos and podcasts)
 
 Many other players will be supported due to support for the MPRIS DBUS protocol,
 without a specific backend.  If you only need support for those players,
