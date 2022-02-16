@@ -16,7 +16,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     scripts=['player_do'],
-
+    python_requires=">=3.2",
     # metadata for upload to PyPI
     author="Luke Plant",
     author_email="L.Plant.98@cantab.net",
@@ -43,6 +43,8 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         ],
     **extra
 )

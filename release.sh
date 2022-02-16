@@ -9,4 +9,4 @@ find player_do -type d | xargs chmod ugo+rx
 
 VERSION=$(./setup.py --version) || exit 1
 
-twine upload dist/playerdo-$VERSION-py2.py3-none-any.whl dist/playerdo-$VERSION.tar.gz
+twine upload dist/playerdo-$VERSION-py3-none-any.whl dist/playerdo-$VERSION.tar.gz
