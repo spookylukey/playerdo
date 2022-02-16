@@ -15,11 +15,12 @@ def force_unicode(s):
 class SettingsInstallerBase(object):
 
     def get_next_custom_keybinding_name(self, existing):
-        # All custom keybindings start with 'custom'
         if len(existing) == 0:
             next_val = 0
         else:
-            next_val = max(int(n[len('custom'):]) for n in existing) + 1
+            # All custom keybindings start with 'custom'
+            PREFIX = 'custom'
+            next_val = max(int(n[len(PREFIX):]) for n in existing if n.startswith(PREFIX)) + 1
         return 'custom' + str(next_val)
 
     def install_shortcuts(self):
