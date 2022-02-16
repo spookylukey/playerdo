@@ -2,7 +2,8 @@ player_do
 =========
 
 player_do provides a simple command line interface to control whatever media
-player is running on your computer.
+player is running on your computer. It has been designed for and tested on
+Linux.
 
 It is designed to allow you to configure the media buttons on your keyboard
 (play, pause, next etc.) to Do The Right Thing without having to change anything
