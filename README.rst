@@ -43,16 +43,27 @@ You need Python 3. You can use pip to install::
     pip install playerdo
 
 However, we recommend the use of `pipx <https://pypi.org/project/pipx/>`_ to
-install it into its own virtualenv::
+install it into its own virtualenv, using your standard system Python 3,
+with “system” libraries available (due to the DBUS requirement below)::
 
-    pipx install playerdo --system-site-packages
+    pipx install playerdo --system-site-packages --python `which python3`
 
-You may also need to install Python DBUS bindings. We recommend doing this at
+You also need to install Python DBUS bindings. We recommend doing this at
 the system level. On Debian-like systems this is usually done with one of the
 following packages::
 
       python-dbus
       python3-dbus
+
+
+An alternative to system-level Python DBUS is to use pipx to install them::
+
+    pipx inject playerdo dbus-python
+
+(If an appropriate binary wheel for dbus is not found, the above may require
+development packages to be installed, including ``libglib2.0-dev`` and
+``libdbus-1-dev`` and Python development headers).
+
 
 Usage
 -----
