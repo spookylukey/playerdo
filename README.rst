@@ -64,6 +64,9 @@ An alternative to system-level Python DBUS is to use pipx to install them::
 development packages to be installed, including ``libglib2.0-dev`` and
 ``libdbus-1-dev`` and Python development headers).
 
+After installation, you can use ``player_do test`` to ensure everything expected
+is available. It’s normal to see error messages relating to players that you
+do not use or have installed.
 
 Usage
 -----
