@@ -3,7 +3,7 @@ import re
 
 from playerdo.backends.base import Player
 from playerdo.backends.socket import UnixSocketPlayerMixin
-from playerdo.utils import PlayerException
+from playerdo.utils import BackendBrokenException, PlayerException
 
 
 class ShellFm(UnixSocketPlayerMixin, Player):
@@ -12,9 +12,14 @@ class ShellFm(UnixSocketPlayerMixin, Player):
 
     @classmethod
     def socket_path(cls):
-        rc_path = os.path.join(os.environ["HOME"], ".shell-fm", "shell-fm.rc")
-        conf = open(rc_path).read()
-        return re.search(r"^\s*unix\s*=\s*([^#\s]+)", conf, re.MULTILINE).groups()[0]
+        try:
+            rc_path = os.path.join(os.environ["HOME"], ".shell-fm", "shell-fm.rc")
+            conf = open(rc_path).read()
+            return re.search(r"^\s*unix\s*=\s*([^#\s]+)", conf, re.MULTILINE).groups()[0]
+        except Exception:
+            raise BackendBrokenException(
+                "Cannot find configuration file ~/.shell-fm/shell-fm.rc, or the 'unix' configuration item in that file"
+            )
 
     def _get_status(self):
         # This only works with shell-fm 0.8 and greater
@@ -28,17 +33,6 @@ class ShellFm(UnixSocketPlayerMixin, Player):
 
     def is_playing(self):
         return self._get_status() == "PLAYING"
-
-    @classmethod
-    def check_dependencies(cls):
-        retval = []
-        try:
-            cls.socket_path()
-        except Exception:
-            retval.append(
-                "Cannot find configuration file ~/.shell-fm/shell-fm.rc, or the 'unix' configuration item in that file."
-            )
-        return retval
 
     def play(self):
         if not self.is_stopped():

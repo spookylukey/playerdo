@@ -51,12 +51,10 @@ def do_test(player_classes, players):
     """
     Checks that all backends have required dependencies, printing any failures
     """
-    for cls in player_classes:
-        failures = cls.check_dependencies()
-        if len(failures) > 0:
-            sys.stdout.write(f"Player '{cls.friendly_name}' has missing dependencies:\n")
-            for failure in failures:
-                sys.stdout.write("  " + failure + "\n")
+    for cls, errors in get_broken_backends(player_classes).items():
+        sys.stdout.write(f"Player '{cls.friendly_name}' has missing dependencies:\n")
+        for error in errors:
+            sys.stdout.write(f" - {error}\n")
 
 
 def do_command(command, players):
@@ -91,7 +89,7 @@ def is_playing(player_classes, players):
         sys.exit(1)
 
 
-def find_players():
+def find_players_sorted():
     return sort_players([instance for cls in find_player_classes() for instance in cls.get_instances()])
 
 

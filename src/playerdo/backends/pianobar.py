@@ -2,6 +2,7 @@ import os
 import os.path
 
 from playerdo.backends.base import Player
+from playerdo.utils import BackendBrokenException
 
 
 class PianoBar(Player):
@@ -9,23 +10,14 @@ class PianoBar(Player):
     friendly_name = "pianobar"
 
     def __init__(self):
-        self._fifo = self.get_fifo_path()
-
-    @classmethod
-    def get_fifo_path(cls):
-        return os.path.join(os.environ["HOME"], ".config", "pianobar", "ctl")
+        self._fifo = os.path.join(os.environ["HOME"], ".config", "pianobar", "ctl")
 
     def _send(self, cmd):
         if os.path.exists(self._fifo):
             with open(self._fifo, "wb") as f:
                 f.write(cmd.encode("ascii"))
-
-    @classmethod
-    def check_dependencies(cls):
-        fifo_path = cls.get_fifo_path()
-        if not os.path.exists(fifo_path):
-            return [f"Could not find pianobar control fifo at '{fifo_path}'"]
-        return []
+        else:
+            raise BackendBrokenException(f"Could not find pianobar control fifo at '{self._fifo}'")
 
     def is_stopped(self):
         # Play starts as soon as it's launched, and there's no stop command

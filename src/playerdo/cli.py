@@ -12,7 +12,8 @@ import sys
 
 from playerdo import __version__, install
 from playerdo.backends.base import Player
-from playerdo.main import do_command, do_test, find_player_classes, find_players, get_broken_backends, is_playing
+from playerdo.main import do_command, do_test, find_player_classes, find_players_sorted, get_broken_backends, is_playing
+from playerdo.utils import BackendBrokenException
 
 
 def make_command_help():
@@ -29,23 +30,28 @@ Not all operations are supported or fully supported by all players.
     return command_help
 
 
-def make_player_help(player_classes, players):
+def make_player_help(player_classes, sorted_players):
     help = """
-Available players (in the order they will currently be used):
+Active players (in the order they will currently be used):
 
 """
     seen_classes = set()
-    for player in players:
-        help += f"  {player.friendly_name}\n"
-        seen_classes.add(player.__class__)
+    for player in sorted_players:
+        try:
+            running = player.is_running()
+        except (NotImplementedError, BackendBrokenException):
+            running = False
+        if running:
+            help += f"  {player.friendly_name}\n"
+            seen_classes.add(player.__class__)
 
     unseen_classes = set(player_classes) - seen_classes
     broken_classes = get_broken_backends(unseen_classes)
     unused_classes = set(cls for cls in unseen_classes if cls not in broken_classes)
 
     if unused_classes:
-        help += "\nSupported but currently unused backends:\n\n"
-        for cls in unused_classes:
+        help += "\nInactive backends/players:\n\n"
+        for cls in sorted(unused_classes, key=lambda cls: cls.friendly_name):
             help += f"  {cls.friendly_name}\n"
 
     if broken_classes:
@@ -118,7 +124,7 @@ command_dict = dict((name, f) for name, doc, f in commands)
 
 def main():
     player_classes = find_player_classes()
-    players = find_players()
+    players = find_players_sorted()
     parser = argparse.ArgumentParser(
         prog=f"player_do {__version__}",
         description=(

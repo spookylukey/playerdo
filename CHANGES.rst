@@ -8,6 +8,7 @@ Version 2.1 (unreleased)
 * Dropped support for MPRIS 1
 * Reorganised structure into more standard layout, including using console_scripts entry point
 * Dropped ``help`` command in favour of ``--help``
+* Overhauled the way active/inactive/broken backends/players are shown in help
 
 Version 2.0 (2020-01-13)
 ------------------------
