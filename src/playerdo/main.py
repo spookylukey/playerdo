@@ -10,13 +10,11 @@ def sort_players(players):
     """
     Returns list of players, sorted by priority.
     """
-    # Try to find out which one is playing
-    states = []
-    orders = []
-    for p in players:
+
+    def key(player):
         running = False
         try:
-            running = p.is_running()
+            running = player.is_running()
         except (NotImplementedError, BackendBrokenException):
             running = False
 
@@ -24,7 +22,7 @@ def sort_players(players):
             state = 3
         else:
             try:
-                is_stopped = p.is_stopped()
+                is_stopped = player.is_stopped()
             except (NotImplementedError, BackendBrokenException):
                 is_stopped = None
 
@@ -37,14 +35,9 @@ def sort_players(players):
                 # definitely stopped is less preferred than one that *might* be
                 # playing.
                 state = 1
+        return (state, player.sort_order, player.friendly_name)
 
-        states.append(state)
-        orders.append(p.sort_order)
-
-    player_list = list(zip(states, orders, players))
-    player_list.sort()
-
-    return [x[2] for x in player_list]
+    return sorted(players, key=key)
 
 
 def do_test(player_classes, players):
