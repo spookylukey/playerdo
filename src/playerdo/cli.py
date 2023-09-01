@@ -104,7 +104,8 @@ commands.extend(
 command_dict = dict((name, f) for name, doc, f in commands)
 
 
-def main(argv):
+def main():
+    argv = sys.argv
     players = find_players()
 
     if len(argv) < 2:
@@ -122,4 +123,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main())

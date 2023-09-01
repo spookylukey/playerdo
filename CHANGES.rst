@@ -6,6 +6,7 @@ Version 2.1 (unreleased)
 
 * Dropped support for Python < 3.8
 * Dropped support for MPRIS 1
+* Reorganised structure into more standard layout, including using console_scripts entry point
 
 Version 2.0 (2020-01-13)
 ------------------------
