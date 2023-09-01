@@ -9,14 +9,15 @@
 #
 import sys
 
-from playerdo import install
+from playerdo import __version__, install
 from playerdo.backends.base import Player
 from playerdo.main import do_command, do_test, find_players, is_playing
 
 
 def usage(players):
     # Print help and list of supported players
-    help = """Usage: player_do <command>
+    help = f"""player_do {__version__}
+Usage: player_do <command>
 
   Media players that are currently running will be detected, and the command
   will be passed on to the first, giving priority to players that seem to be
