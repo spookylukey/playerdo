@@ -34,8 +34,9 @@ Those that have been tested include the following:
 * Firefox, Chrome (when playing some media like videos and podcasts)
 
 Many other players will be supported due to support for the MPRIS DBUS protocol,
-without a specific backend.  If you only need support for those players,
-consider using `MPRIS-remote <http://incise.org/mpris-remote.html>`_.
+without a specific backend. If you only need support for those players, consider
+using `MPRIS-remote <http://incise.org/mpris-remote.html>`_ or `playerctl
+<https://github.com/altdesktop/playerctl>`_.
 
 To add more supported programs, see the existing code in the ``backends``
 directory. Patches gratefully received!
