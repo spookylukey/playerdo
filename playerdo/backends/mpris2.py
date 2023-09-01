@@ -73,22 +73,22 @@ class Mpris2Player(Player):
             return bus_name
 
     @property
-    def player(self):
+    def dbus_obj(self):
         bus_name = self.bus_name
 
         if bus_name is None:
             raise NotImplementedError
 
         try:
-            return self._player
+            return self._dbus_obj
         except AttributeError:
-            return self._init_player()
+            return self._init_dbus()
 
-    def _init_player(self):
-        if not hasattr(self, "_player"):
+    def _init_dbus(self):
+        if not hasattr(self, "_dbus_obj"):
             obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
-            self._player = obj
-        return self._player
+            self._dbus_obj = obj
+        return self._dbus_obj
 
     def _playback_status(self):
         props = DBusProperties(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
@@ -104,7 +104,7 @@ class Mpris2Player(Player):
             return False
         try:
             # Force evaluation:
-            self._init_player()
+            self._init_dbus()
             return True
         except dbus.DBusException:
             return False
@@ -127,25 +127,25 @@ class Mpris2Player(Player):
         return retval
 
     def play(self):
-        self.player.Play()
+        self.dbus_obj.Play()
 
     def pause(self):
-        self.player.Pause()
+        self.dbus_obj.Pause()
 
     def unpause(self):
         self.play()
 
     def playpause(self):
-        self.player.PlayPause()
+        self.dbus_obj.PlayPause()
 
     def next(self):
-        self.player.Next()
+        self.dbus_obj.Next()
 
     def prev(self):
-        self.player.Previous()
+        self.dbus_obj.Previous()
 
     def stop(self):
-        self.player.Stop()
+        self.dbus_obj.Stop()
 
     def osd(self):
         raise NotImplementedError()

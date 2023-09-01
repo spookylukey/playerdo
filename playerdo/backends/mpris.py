@@ -85,22 +85,22 @@ class MprisPlayer(Player):
             return bus_name
 
     @property
-    def player(self):
+    def dbus_obj(self):
         bus_name = self.bus_name
 
         if bus_name is None:
             raise NotImplementedError
 
         try:
-            return self._player
+            return self._dbus_obj
         except AttributeError:
-            return self._init_player()
+            return self._init_dbus()
 
-    def _init_player(self):
-        if not hasattr(self, "_player"):
+    def _init_dbus(self):
+        if not hasattr(self, "_dbus_obj"):
             player = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, interface=MPRIS_INTERFACE_NAME)
-            self._player = player
-        return self._player
+            self._dbus_obj = player
+        return self._dbus_obj
 
     def is_running(self):
         try:
@@ -111,7 +111,7 @@ class MprisPlayer(Player):
         if self.bus_name is None:
             return False
         try:
-            self._init_player()
+            self._init_dbus()
             return True
         except dbus.DBusException:
             return False
@@ -120,7 +120,7 @@ class MprisPlayer(Player):
         import dbus
 
         try:
-            return self.player.GetStatus()[0] == 1
+            return self.dbus_obj.GetStatus()[0] == 1
         except dbus.exceptions.DBusException:
             # Assume stopped, not paused, if doesn't support GetStatus
             return False
@@ -129,7 +129,7 @@ class MprisPlayer(Player):
         import dbus
 
         try:
-            return self.player.GetStatus()[0] == 2
+            return self.dbus_obj.GetStatus()[0] == 2
         except dbus.exceptions.DBusException:
             # Assume stopped if doesn't support GetStatus
             return True
@@ -138,7 +138,7 @@ class MprisPlayer(Player):
         import dbus
 
         try:
-            return self.player.GetStatus()[0] == 0
+            return self.dbus_obj.GetStatus()[0] == 0
         except dbus.exceptions.DBusException:
             # Assume stopped, not playing, if doesn't support GetStatus
             return False
@@ -152,10 +152,10 @@ class MprisPlayer(Player):
         return retval
 
     def play(self):
-        self.player.Play()
+        self.dbus_obj.Play()
 
     def pause(self):
-        self.player.Pause()
+        self.dbus_obj.Pause()
 
     def unpause(self):
         self.play()
@@ -165,18 +165,18 @@ class MprisPlayer(Player):
 
         try:
             # Some define this e.g. Exaile
-            self.player.PlayPause()
+            self.dbus_obj.PlayPause()
         except dbus.DBusException:
             super().playpause()
 
     def next(self):
-        self.player.Next()
+        self.dbus_obj.Next()
 
     def prev(self):
-        self.player.Prev()
+        self.dbus_obj.Prev()
 
     def stop(self):
-        self.player.Stop()
+        self.dbus_obj.Stop()
 
     def osd(self):
-        self.player.ShowOSD()
+        self.dbus_obj.ShowOSD()
