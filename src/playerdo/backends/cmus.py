@@ -10,7 +10,8 @@ class Cmus(UnixSocketPlayerMixin, Player):
     process_name = "cmus"
     friendly_name = "cmus"
 
-    def socket_path(self):
+    @classmethod
+    def socket_path(cls):
         for f in [
             os.path.join(os.environ["XDG_RUNTIME_DIR"], "cmus-socket"),
             os.path.join(os.environ["HOME"], ".cmus", "socket"),

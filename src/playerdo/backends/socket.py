@@ -48,5 +48,6 @@ class UnixSocketPlayerMixin(SocketPlayerBase):
     def connect_socket(self, socket):
         socket.connect(self.socket_path())
 
-    def socket_path(self):
+    @classmethod
+    def socket_path(cls):
         raise NotImplementedError()

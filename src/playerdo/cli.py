@@ -12,7 +12,7 @@ import sys
 
 from playerdo import __version__, install
 from playerdo.backends.base import Player
-from playerdo.main import do_command, do_test, find_players, is_playing
+from playerdo.main import do_command, do_test, find_player_classes, find_players, get_broken_backends, is_playing
 
 
 def make_command_help():
@@ -29,21 +29,37 @@ Not all operations are supported or fully supported by all players.
     return command_help
 
 
-def make_player_help(players):
+def make_player_help(player_classes, players):
     help = """
-Currently supported players (in the order they will currently be used):
+Available players (in the order they will currently be used):
 
 """
-    for p in players:
-        n = getattr(p, "friendly_name", None)
-        if n is not None:
-            help += "  " + n + "\n"
+    seen_classes = set()
+    for player in players:
+        help += f"  {player.friendly_name}\n"
+        seen_classes.add(player.__class__)
+
+    unseen_classes = set(player_classes) - seen_classes
+    broken_classes = get_broken_backends(unseen_classes)
+    unused_classes = set(cls for cls in unseen_classes if cls not in broken_classes)
+
+    if unused_classes:
+        help += "\nSupported but currently unused backends:\n\n"
+        for cls in unused_classes:
+            help += f"  {cls.friendly_name}\n"
+
+    if broken_classes:
+        help += "\nUnusable backends:\n\n"
+        for cls, errors in broken_classes.items():
+            help += f"  {cls.friendly_name}:\n"
+            for error in errors:
+                help += f"    - {error}\n"
 
     return help
 
 
 # List of commands: (name, docstring, callable)
-# The callable must accept a single argument, a list of players.
+# The callable must accept two arguments, a list of player classes and a list of player instances
 commands = []
 
 for c in [
@@ -59,7 +75,7 @@ for c in [
 ]:
 
     def mk_command(name):
-        def command(players):
+        def command(player_classes, players):
             return do_command(name, players)
 
         return command
@@ -101,6 +117,7 @@ command_dict = dict((name, f) for name, doc, f in commands)
 
 
 def main():
+    player_classes = find_player_classes()
     players = find_players()
     parser = argparse.ArgumentParser(
         prog=f"player_do {__version__}",
@@ -110,7 +127,7 @@ and the command will be passed on to the first, giving
 priority to players that seem to be active."""
         ),
         formatter_class=argparse.RawTextHelpFormatter,
-        epilog=make_player_help(players),
+        epilog=make_player_help(player_classes, players),
     )
 
     parser.add_argument("command", help=make_command_help())
@@ -123,7 +140,7 @@ priority to players that seem to be active."""
         parser.print_help()
         sys.exit(1)
     else:
-        command(players)
+        command(player_classes, players)
 
 
 if __name__ == "__main__":

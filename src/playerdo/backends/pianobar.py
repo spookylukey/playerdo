@@ -9,16 +9,22 @@ class PianoBar(Player):
     friendly_name = "pianobar"
 
     def __init__(self):
-        self._fifo = os.path.join(os.environ["HOME"], ".config", "pianobar", "ctl")
+        self._fifo = self.get_fifo_path()
+
+    @classmethod
+    def get_fifo_path(cls):
+        return os.path.join(os.environ["HOME"], ".config", "pianobar", "ctl")
 
     def _send(self, cmd):
         if os.path.exists(self._fifo):
             with open(self._fifo, "wb") as f:
                 f.write(cmd.encode("ascii"))
 
-    def check_dependencies(self):
-        if not os.path.exists(self._fifo):
-            return [f"Could not find pianobar control fifo at '{self._fifo}'"]
+    @classmethod
+    def check_dependencies(cls):
+        fifo_path = cls.get_fifo_path()
+        if not os.path.exists(fifo_path):
+            return [f"Could not find pianobar control fifo at '{fifo_path}'"]
         return []
 
     def is_stopped(self):

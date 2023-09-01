@@ -10,7 +10,8 @@ class ShellFm(UnixSocketPlayerMixin, Player):
     process_name = "shell-fm"
     friendly_name = "shell-fm"
 
-    def socket_path(self):
+    @classmethod
+    def socket_path(cls):
         rc_path = os.path.join(os.environ["HOME"], ".shell-fm", "shell-fm.rc")
         conf = open(rc_path).read()
         return re.search(r"^\s*unix\s*=\s*([^#\s]+)", conf, re.MULTILINE).groups()[0]
@@ -28,10 +29,11 @@ class ShellFm(UnixSocketPlayerMixin, Player):
     def is_playing(self):
         return self._get_status() == "PLAYING"
 
-    def check_dependencies(self):
+    @classmethod
+    def check_dependencies(cls):
         retval = []
         try:
-            self.socket_path()
+            cls.socket_path()
         except Exception:
             retval.append(
                 "Cannot find configuration file ~/.shell-fm/shell-fm.rc, or the 'unix' configuration item in that file."

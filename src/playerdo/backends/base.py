@@ -9,8 +9,15 @@ class Player:
     """
 
     process_name: str  # used for pidof
-    friendly_name: str  # used for display in help
+    friendly_name: str  # required, used for display in help and to identify concrete subclasses
     sort_order = 0  # set lower for higher priority
+
+    @classmethod
+    def get_instances(cls):
+        # Most Players have a single instance.
+        if cls.check_dependencies():
+            return []
+        return [cls()]
 
     def is_running(self):
         """
@@ -34,7 +41,8 @@ class Player:
         """
         raise NotImplementedError
 
-    def check_dependencies(self):
+    @classmethod
+    def check_dependencies(cls):
         """
         Returns a list of failed dependencies for using this backend, or an
         empty list if everything is OK.  Most players do not need this.

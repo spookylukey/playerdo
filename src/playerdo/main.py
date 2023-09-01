@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 
 from playerdo.backends.base import Player
@@ -45,14 +47,14 @@ def sort_players(players):
     return [x[2] for x in player_list]
 
 
-def do_test(players):
+def do_test(player_classes, players):
     """
     Checks that all backends have required dependencies, printing any failures
     """
-    for p in players:
-        failures = p.check_dependencies()
+    for cls in player_classes:
+        failures = cls.check_dependencies()
         if len(failures) > 0:
-            sys.stdout.write(f"Player '{p.friendly_name}' has missing dependencies:\n")
+            sys.stdout.write(f"Player '{cls.friendly_name}' has missing dependencies:\n")
             for failure in failures:
                 sys.stdout.write("  " + failure + "\n")
 
@@ -81,7 +83,7 @@ def do_command(command, players):
     sys.exit(1)
 
 
-def is_playing(players):
+def is_playing(player_classes, players):
     retval = do_command("is_playing", players)
     if retval:
         sys.exit(0)
@@ -90,9 +92,13 @@ def is_playing(players):
 
 
 def find_players():
+    return sort_players([instance for cls in find_player_classes() for instance in cls.get_instances()])
+
+
+def find_player_classes():
     import playerdo.backends  # noqa:F401
 
-    return sort_players([cls() for cls in get_subclasses(Player)])
+    return [cls for cls in get_subclasses(Player) if getattr(cls, "friendly_name", None) is not None]
 
 
 def get_subclasses(cls):
@@ -100,3 +106,12 @@ def get_subclasses(cls):
     for subclass in subclasses:
         subclasses.extend(get_subclasses(subclass))
     return subclasses
+
+
+def get_broken_backends(player_classes) -> dict[type, list[str]]:
+    broken_classes = {}
+    for cls in player_classes:
+        errors = cls.check_dependencies()
+        if errors:
+            broken_classes[cls] = errors
+    return broken_classes

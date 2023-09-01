@@ -37,13 +37,16 @@ def get_sorted_candidate_buses():
 
 
 class Mpris2Player(Player):
-    _friendly_name = "Any MPRIS 2 player"
+    _friendly_name = "MPRIS2"
+    friendly_name = "MPRRIS2"
 
     sort_order = 5
 
-    @property
-    def friendly_name(self):
-        retval = self._friendly_name
+    def __init__(self):
+        self.set_friendly_name()
+
+    def set_friendly_name(self):
+        name = self._friendly_name
         try:
             buses = get_sorted_candidate_buses()
             names = []
@@ -53,11 +56,10 @@ class Mpris2Player(Player):
                 names.append(props.get("Identity"))
 
             if len(names) > 0:
-                retval += f" (currently running: {', '.join(names)})"
+                name += f" (currently running: {', '.join(names)})"
         except Exception:
             pass
-
-        return retval
+        self.friendly_name = name
 
     @property
     def bus_name(self):
@@ -118,7 +120,8 @@ class Mpris2Player(Player):
     def is_playing(self):
         return self._playback_status() == "Playing"
 
-    def check_dependencies(self):
+    @classmethod
+    def check_dependencies(cls):
         retval = []
         try:
             import dbus  # noqa
