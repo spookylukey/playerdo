@@ -126,7 +126,7 @@ def main():
     player_classes = find_player_classes()
     players = find_players_sorted()
     parser = argparse.ArgumentParser(
-        prog=f"player_do {__version__}",
+        prog="player_do",
         description=(
             """Media players that are currently running will be detected,
 and the command will be passed on to the first, giving
@@ -139,6 +139,7 @@ priority to players that seem to be active."""
     parser.add_argument(
         "-p", "--player", help="Send commands to the given player (with name chosen from the list below)"
     )
+    parser.add_argument("--version", action="version", version=__version__)
     parser.add_argument("command", help=make_command_help())
 
     args = parser.parse_args()
