@@ -25,91 +25,39 @@ MAIN_INTERFACE_NAME = "org.mpris.MediaPlayer2"
 PLAYER_INTERFACE_NAME = "org.mpris.MediaPlayer2.Player"
 
 
-def get_sorted_candidate_buses():
-    candidates = get_all_mpris_buses()
-    # Sort by PlaybackStatus
-    buses = []
-    for n in candidates:
-        state = str(DBusProperties(n, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME).get("PlaybackStatus"))
-        buses.append((playback_status_levels[state], n))
-    buses.sort()
-    return [n for i, n in buses]
-
-
 class Mpris2Player(Player):
     _friendly_name = "MPRIS2"
     friendly_name = "MPRRIS2"
 
+    # We put this lower than default, because MPRIS covers a lot of players,
+    # including web browsers. If someone has another Music app running, it's
+    # likely that's what they want player_do to control.
     sort_order = 5
 
-    def __init__(self):
-        self.set_friendly_name()
+    @classmethod
+    def get_instances(cls):
+        if cls.check_dependencies():
+            return []
+        return [cls._make_instance(bus) for bus in get_all_mpris_buses()]
 
-    def set_friendly_name(self):
-        name = self._friendly_name
-        try:
-            buses = get_sorted_candidate_buses()
-            names = []
+    @classmethod
+    def _make_instance(cls, bus_name: str):
+        props = DBusProperties(bus_name, PLAYER_OBJECT_NAME, MAIN_INTERFACE_NAME)
+        app_identity = props.get("Identity")
+        return cls(name=f"{cls.friendly_name}:{app_identity}", bus_name=bus_name)
 
-            for n in buses:
-                props = DBusProperties(n, PLAYER_OBJECT_NAME, MAIN_INTERFACE_NAME)
-                names.append(props.get("Identity"))
-
-            if len(names) > 0:
-                name += f" (currently running: {', '.join(names)})"
-        except Exception:
-            pass
+    def __init__(self, *, name, bus_name):
         self.friendly_name = name
-
-    @property
-    def bus_name(self):
-        try:
-            return self._bus_name
-        except AttributeError:
-            buses = get_sorted_candidate_buses()
-            if len(buses) > 0:
-                bus_name = buses[0]
-            else:
-                bus_name = None
-            self._bus_name = bus_name
-            return bus_name
-
-    @property
-    def dbus_obj(self):
-        bus_name = self.bus_name
-
-        if bus_name is None:
-            raise NotImplementedError
-
-        try:
-            return self._dbus_obj
-        except AttributeError:
-            return self._init_dbus()
-
-    def _init_dbus(self):
-        if not hasattr(self, "_dbus_obj"):
-            obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
-            self._dbus_obj = obj
-        return self._dbus_obj
+        self.bus_name = bus_name
+        self.dbus_obj = DBusObject(bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
 
     def _playback_status(self):
         props = DBusProperties(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
         return str(props.get("PlaybackStatus"))
 
     def is_running(self):
-        try:
-            import dbus
-        except ImportError:
-            return False
-
-        if self.bus_name is None:
-            return False
-        try:
-            # Force evaluation:
-            self._init_dbus()
-            return True
-        except dbus.DBusException:
-            return False
+        # The instance only exists if the player is running
+        return True
 
     def is_paused(self):
         return self._playback_status() == "Paused"
