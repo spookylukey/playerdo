@@ -44,7 +44,7 @@ directory. Patches gratefully received!
 Installation
 ------------
 
-You need Python 3. You can use pip to install::
+You need Python 3.8 or later. You can use pip to install::
 
     pip install playerdo
 
