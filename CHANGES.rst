@@ -9,6 +9,7 @@ Version 2.1 (unreleased)
 * Reorganised structure into more standard layout, including using console_scripts entry point
 * Dropped ``help`` command in favour of ``--help``
 * Overhauled the way active/inactive/broken backends/players are shown in help
+* Added ``-p`` / ``--player`` option for selecting the player.
 
 Version 2.0 (2020-01-13)
 ------------------------

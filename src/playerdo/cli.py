@@ -136,6 +136,9 @@ priority to players that seem to be active."""
         epilog=make_player_help(player_classes, players),
     )
 
+    parser.add_argument(
+        "-p", "--player", help="Send commands to the given player (with name chosen from the list below)"
+    )
     parser.add_argument("command", help=make_command_help())
 
     args = parser.parse_args()
@@ -146,7 +149,14 @@ priority to players that seem to be active."""
         parser.print_help()
         sys.exit(1)
     else:
-        command(player_classes, players)
+        if args.player:
+            chosen_players = [player for player in players if player.friendly_name == args.player]
+            if not chosen_players:
+                sys.stderr.write(f"Player '{args.player}' not recognised\n")
+                sys.exit(1)
+        else:
+            chosen_players = players
+        command(player_classes, chosen_players)
 
 
 if __name__ == "__main__":
