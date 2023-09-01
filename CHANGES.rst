@@ -1,7 +1,7 @@
 Change log
 ==========
 
-Version 2.1 (unreleased)
+Version 2.1 (2023-09-01)
 ------------------------
 
 * Dropped support for Python < 3.8
