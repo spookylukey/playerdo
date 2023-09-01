@@ -3,22 +3,22 @@ import os.path
 
 from playerdo.backends.base import Player
 
-class PianoBar(Player):
 
+class PianoBar(Player):
     process_name = "pianobar"
     friendly_name = "pianobar"
 
     def __init__(self):
-        self._fifo = os.path.join(os.environ['HOME'], '.config', 'pianobar', 'ctl')
+        self._fifo = os.path.join(os.environ["HOME"], ".config", "pianobar", "ctl")
 
     def _send(self, cmd):
         if os.path.exists(self._fifo):
-            with open(self._fifo, 'wb') as f:
-                f.write(cmd.encode('ascii'))
+            with open(self._fifo, "wb") as f:
+                f.write(cmd.encode("ascii"))
 
     def check_dependencies(self):
         if not os.path.exists(self._fifo):
-            return ["Could not find pianobar control fifo at '{}'".format(self._fifo)]
+            return [f"Could not find pianobar control fifo at '{self._fifo}'"]
         return []
 
     def is_stopped(self):
@@ -32,19 +32,18 @@ class PianoBar(Player):
         self.unpause()
 
     def pause(self):
-        self._send('S')
+        self._send("S")
 
     def togglepause(self):
-        self._send('p')
+        self._send("p")
 
     def unpause(self):
-        self._send('P')
+        self._send("P")
 
     def stop(self):
         self.pause()
 
     def next(self):
-        self._send('n')
+        self._send("n")
 
     # prev - not possible
-

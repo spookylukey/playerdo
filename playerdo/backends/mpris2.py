@@ -5,17 +5,18 @@ from playerdo.utils import DBusObject, DBusProperties
 # check_dependencies functionality to be able to report the missing dbus
 # dependency rather than get an ImportError
 
+
 def get_all_mpris_buses():
     import dbus
+
     bus = dbus.SessionBus()
-    return [str(s) for s in bus.list_names()
-            if str(s).startswith('org.mpris.MediaPlayer2')]
+    return [str(s) for s in bus.list_names() if str(s).startswith("org.mpris.MediaPlayer2")]
 
 
 playback_status_levels = {
-    'Playing': 0,
-    'Paused':  1,
-    'Stopped': 2,
+    "Playing": 0,
+    "Paused": 1,
+    "Stopped": 2,
 }
 
 
@@ -23,21 +24,19 @@ PLAYER_OBJECT_NAME = "/org/mpris/MediaPlayer2"
 MAIN_INTERFACE_NAME = "org.mpris.MediaPlayer2"
 PLAYER_INTERFACE_NAME = "org.mpris.MediaPlayer2.Player"
 
+
 def get_sorted_candidate_buses():
     candidates = get_all_mpris_buses()
     # Sort by PlaybackStatus
-    l = []
-    import dbus
+    buses = []
     for n in candidates:
-        state = str(DBusProperties(n, PLAYER_OBJECT_NAME,
-                                   PLAYER_INTERFACE_NAME).get("PlaybackStatus"))
-        l.append((playback_status_levels[state], n))
-    l.sort()
-    return [n for i, n in l]
+        state = str(DBusProperties(n, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME).get("PlaybackStatus"))
+        buses.append((playback_status_levels[state], n))
+    buses.sort()
+    return [n for i, n in buses]
 
 
 class Mpris2Player(Player):
-
     _friendly_name = "Any MPRIS 2 player"
 
     sort_order = 5
@@ -46,18 +45,15 @@ class Mpris2Player(Player):
     def friendly_name(self):
         retval = self._friendly_name
         try:
-            l = get_sorted_candidate_buses()
+            buses = get_sorted_candidate_buses()
             names = []
 
-            for n in l:
-                try:
-                    props = DBusProperties(n, PLAYER_OBJECT_NAME, MAIN_INTERFACE_NAME)
-                    names.append(props.get("Identity"))
-                except:
-                    pass
+            for n in buses:
+                props = DBusProperties(n, PLAYER_OBJECT_NAME, MAIN_INTERFACE_NAME)
+                names.append(props.get("Identity"))
 
             if len(names) > 0:
-                retval += " (currently running: %s)" %  ", ".join(names)
+                retval += f" (currently running: {', '.join(names)})"
         except Exception:
             pass
 
@@ -68,9 +64,9 @@ class Mpris2Player(Player):
         try:
             return self._bus_name
         except AttributeError:
-            l = get_sorted_candidate_buses()
-            if len(l) > 0:
-                bus_name = l[0]
+            buses = get_sorted_candidate_buses()
+            if len(buses) > 0:
+                bus_name = buses[0]
             else:
                 bus_name = None
             self._bus_name = bus_name
@@ -86,9 +82,13 @@ class Mpris2Player(Player):
         try:
             return self._player
         except AttributeError:
+            return self._init_player()
+
+    def _init_player(self):
+        if not hasattr(self, "_player"):
             obj = DBusObject(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
             self._player = obj
-            return obj
+        return self._player
 
     def _playback_status(self):
         props = DBusProperties(self.bus_name, PLAYER_OBJECT_NAME, PLAYER_INTERFACE_NAME)
@@ -104,7 +104,7 @@ class Mpris2Player(Player):
             return False
         try:
             # Force evaluation:
-            bus = self.player._bus
+            self._init_player()
             return True
         except dbus.DBusException:
             return False
@@ -121,7 +121,7 @@ class Mpris2Player(Player):
     def check_dependencies(self):
         retval = []
         try:
-            import dbus
+            import dbus  # noqa
         except ImportError:
             retval.append("dbus Python bindings are required")
         return retval

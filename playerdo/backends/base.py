@@ -1,16 +1,16 @@
-from playerdo.utils import program_running, catch_unimplemented
+from playerdo.utils import catch_unimplemented, program_running
 
 
 # Base class useful for implementing players
-class Player(object):
+class Player:
     """
     Base class for implementing players.  It does not have to
     be used, but does provide some useful default behaviour.
     """
 
-    process_name = None # used for pidof
-    friendly_name = None # used for display in help
-    sort_order = 0 # set lower for higher priority
+    process_name: str  # used for pidof
+    friendly_name: str  # used for display in help
+    sort_order = 0  # set lower for higher priority
 
     def is_running(self):
         """
@@ -45,7 +45,7 @@ class Player(object):
         try:
             m = getattr(self, command)
         except AttributeError:
-            raise Exception("'%s' is not a valid command" % command)
+            raise Exception(f"'{command}' is not a valid command")
         return m()
 
     # Commands
@@ -73,9 +73,9 @@ class Player(object):
         """
         is_paused = catch_unimplemented(self.is_paused)
 
-        if is_paused == True:
+        if is_paused is True:
             self.unpause()
-        elif is_paused == False:
+        elif is_paused is False:
             self.pause()
         else:
             # Just hope this does the right thing:
@@ -87,9 +87,9 @@ class Player(object):
         """
         is_stopped = catch_unimplemented(self.is_stopped)
 
-        if is_stopped == True:
+        if is_stopped is True:
             self.play()
-        elif is_stopped == False:
+        elif is_stopped is False:
             self.togglepause()
         else:
             # Just hope 'togglepause' does the right thing:

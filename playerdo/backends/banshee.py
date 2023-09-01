@@ -3,7 +3,6 @@ from playerdo.utils import process_retval, process_stdout, program_running
 
 
 class Banshee(Player):
-
     process_name = "banshee-1"
     friendly_name = "Banshee"
 
@@ -11,16 +10,13 @@ class Banshee(Player):
         return program_running("banshee-1") or program_running("banshee")
 
     def is_stopped(self):
-        return process_stdout(["banshee", "--query-current-state"]).strip() \
-            ==  "current-state: idle"
+        return process_stdout(["banshee", "--query-current-state"]).strip() == "current-state: idle"
 
     def is_paused(self):
-        return process_stdout(["banshee", "--query-current-state"]).strip() \
-            ==  "current-state: paused"
+        return process_stdout(["banshee", "--query-current-state"]).strip() == "current-state: paused"
 
     def is_playing(self):
-        return process_stdout(["banshee", "--query-current-state"]).strip() \
-            ==  "current-state: playing"
+        return process_stdout(["banshee", "--query-current-state"]).strip() == "current-state: playing"
 
     def play(self):
         process_retval(["banshee", "--play"])

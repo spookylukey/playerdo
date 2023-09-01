@@ -38,7 +38,7 @@ def program_running(progam):
 
 
 # DBus helpers
-class DBusObject(object):
+class DBusObject:
     """
     Wrapper for a dbus object, so that the bus name and object name only needs
     to be specified once.
@@ -46,6 +46,7 @@ class DBusObject(object):
 
     def __init__(self, bus_name, object_name, interface=None):
         import dbus
+
         bus = dbus.SessionBus()
         self._bus = bus
         obj = bus.get_object(bus_name, object_name)
@@ -56,15 +57,18 @@ class DBusObject(object):
     def __getattr__(self, name):
         def f(*args, **kwargs):
             return getattr(self._obj, name)(*args, **kwargs)
+
         return f
 
-class DBusProperties(object):
+
+class DBusProperties:
     # I can't find a decent way of getting properties in python dbus, this is my
     # wrapper.
 
     def __init__(self, bus_name, object_name, interface_name):
         # dbus_object
         import dbus
+
         bus = dbus.SessionBus()
         self.dbus_object = bus.get_object(bus_name, object_name)
         self.interface_name = interface_name
@@ -75,6 +79,7 @@ class DBusProperties(object):
 
     def set(self, property_name, value):
         self.dbus_props.Set(self.interface_name, property_name, value)
+
 
 # Misc helpers
 def catch_unimplemented(c, replacement=None):
@@ -103,5 +108,6 @@ class BackendBrokenException(Exception):
     will be caught to stop the backend breaking everything for
     all the others.
     """
+
     def __init__(self, message):
         self.message = message

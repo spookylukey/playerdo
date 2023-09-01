@@ -1,7 +1,7 @@
-from playerdo.backends import *
-from playerdo.backends.base import Player
-from playerdo.utils import PlayerException, BackendBrokenException
 import sys
+
+from playerdo.backends.base import Player
+from playerdo.utils import BackendBrokenException, PlayerException
 
 
 def sort_players(players):
@@ -26,9 +26,9 @@ def sort_players(players):
             except (NotImplementedError, BackendBrokenException):
                 is_stopped = None
 
-            if is_stopped == True:
+            if is_stopped is True:
                 state = 2
-            elif is_stopped == False:
+            elif is_stopped is False:
                 state = 0
             else:
                 # In-between value for unknowns, because a player that is
@@ -39,10 +39,10 @@ def sort_players(players):
         states.append(state)
         orders.append(p.sort_order)
 
-    l = list(zip(states, orders, players))
-    l.sort()
+    player_list = list(zip(states, orders, players))
+    player_list.sort()
 
-    return [x[2] for x in l]
+    return [x[2] for x in player_list]
 
 
 def do_test(players):
@@ -52,9 +52,9 @@ def do_test(players):
     for p in players:
         failures = p.check_dependencies()
         if len(failures) > 0:
-            sys.stdout.write("Player '%s' has missing dependencies:\n" % p.friendly_name)
-            for l in failures:
-                sys.stdout.write("  " + l + "\n")
+            sys.stdout.write(f"Player '{p.friendly_name}' has missing dependencies:\n")
+            for failure in failures:
+                sys.stdout.write("  " + failure + "\n")
 
 
 def do_command(command, players):
@@ -72,8 +72,7 @@ def do_command(command, players):
         try:
             return player.do_command(command)
         except NotImplementedError:
-            sys.stderr.write("Operation '%s' not supported for player '%s'.\n" %
-                             (command, player.friendly_name))
+            sys.stderr.write(f"Operation '{command}' not supported for player '{player.friendly_name}'.\n")
             sys.exit(1)
         except PlayerException as e:
             sys.stderr.write(e.message + "\n")
@@ -91,5 +90,13 @@ def is_playing(players):
 
 
 def find_players():
-    return sort_players([v() for v in globals().values()
-                         if type(v) is type and issubclass(v, Player)])
+    import playerdo.backends  # noqa:F401
+
+    return sort_players([cls() for cls in get_subclasses(Player)])
+
+
+def get_subclasses(cls):
+    subclasses = cls.__subclasses__()
+    for subclass in subclasses:
+        subclasses.extend(get_subclasses(subclass))
+    return subclasses

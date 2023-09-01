@@ -1,9 +1,7 @@
-from __future__ import absolute_import
-
 import socket
 
 
-class SocketPlayerBase(object):
+class SocketPlayerBase:
     def send_socket_command(self, command):
         s = self.get_open_socket()
         s.send((command + "\n").encode("ascii"))
@@ -13,10 +11,10 @@ class SocketPlayerBase(object):
         # It's also easier to write both Python 2 and 3 compatible
         # if we convert to unicode strings everywhere.
         # Usually we are getting back ASCII.
-        return s.recv(2048).decode('utf-8')
+        return s.recv(2048).decode("utf-8")
 
     def get_open_socket(self):
-        if hasattr(self, '_socket'):
+        if hasattr(self, "_socket"):
             return self._socket
         s = self.create_socket()
         self.connect_socket(s)
@@ -33,7 +31,6 @@ class SocketPlayerBase(object):
 
 
 class TcpSocketPlayerMixin(SocketPlayerBase):
-
     def create_socket(self):
         return socket.socket()
 
@@ -45,7 +42,6 @@ class TcpSocketPlayerMixin(SocketPlayerBase):
 
 
 class UnixSocketPlayerMixin(SocketPlayerBase):
-
     def create_socket(self):
         return socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
@@ -53,4 +49,4 @@ class UnixSocketPlayerMixin(SocketPlayerBase):
         socket.connect(self.socket_path())
 
     def socket_path(self):
-        raise NotImplentedError()
+        raise NotImplementedError()

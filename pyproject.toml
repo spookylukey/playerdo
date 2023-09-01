@@ -1,0 +1,15 @@
+[tool.black]
+line-length = 120
+#required-version = '23.7.0'
+target-version = ['py311']
+
+
+[tool.ruff]
+line-length = 120
+extend-select = [
+  "UP",  # enable pyupgrade
+  "I",  # enable isort
+  "FLY",  # enably flynt
+]
+target-version = 'py38'
+ignore = ["E501","E731"]

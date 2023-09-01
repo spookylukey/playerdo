@@ -1,11 +1,11 @@
-from playerdo.backends.cmus import *
-from playerdo.backends.moc import *
-from playerdo.backends.mpd import *
-from playerdo.backends.rhythmbox import *
-from playerdo.backends.shellfm import *
-from playerdo.backends.mpris import *
-from playerdo.backends.mpris2 import *
-from playerdo.backends.banshee import *
-from playerdo.backends.quodlibet import *
-from playerdo.backends.pianobar import *
-
+# ruff: noqa: F401
+import playerdo.backends.banshee
+import playerdo.backends.cmus
+import playerdo.backends.moc
+import playerdo.backends.mpd
+import playerdo.backends.mpris
+import playerdo.backends.mpris2
+import playerdo.backends.pianobar
+import playerdo.backends.quodlibet
+import playerdo.backends.rhythmbox
+import playerdo.backends.shellfm

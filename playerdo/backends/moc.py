@@ -1,15 +1,13 @@
 from playerdo.backends.base import Player
-from playerdo.utils import process_stdout, process_retval
-
+from playerdo.utils import process_retval, process_stdout
 
 # Convoluted expressions fpr Python 2/3 compat
-STATE_STOP = "State: STOP".encode('ascii')
-STATE_PAUSE = "State: PAUSE".encode('ascii')
-STATE_PLAY = "State: PLAY".encode('ascii')
+STATE_STOP = "State: STOP".encode("ascii")
+STATE_PAUSE = "State: PAUSE".encode("ascii")
+STATE_PLAY = "State: PLAY".encode("ascii")
 
 
 class Moc(Player):
-
     process_name = "mocp"
     friendly_name = "moc"
 

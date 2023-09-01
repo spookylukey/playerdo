@@ -1,26 +1,23 @@
 from playerdo.backends.base import Player
-from playerdo.utils import process_stdout, process_retval
+from playerdo.utils import process_retval, process_stdout
 
 
 class Quodlibet(Player):
-
     friendly_name = "quodlibet"
 
     def is_running(self):
-        processes = process_stdout(["ps", "-A", "-o", "cmd"]).decode('ascii', errors="ignore").split("\n")
-        return len([p for p in processes
-                if (p.startswith("python")
-                    and ("quodlibet" in p))]) > 0
+        processes = process_stdout(["ps", "-A", "-o", "cmd"]).decode("ascii", errors="ignore").split("\n")
+        return len([p for p in processes if (p.startswith("python") and ("quodlibet" in p))]) > 0
 
     def is_paused(self):
-        return process_stdout(["quodlibet", "--status"]).decode('ascii').strip().split(' ')[0:1] == ["paused"]
+        return process_stdout(["quodlibet", "--status"]).decode("ascii").strip().split(" ")[0:1] == ["paused"]
 
     def is_stopped(self):
         # Has no concept of 'stopped'
         return self.is_paused()
 
     def is_playing(self):
-        return process_stdout(["quodlibet", "--status"]).decode('ascii').strip().split(' ')[0:1] == ["playing"]
+        return process_stdout(["quodlibet", "--status"]).decode("ascii").strip().split(" ")[0:1] == ["playing"]
 
     def play(self):
         process_retval(["quodlibet", "--play"])

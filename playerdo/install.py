@@ -1,27 +1,26 @@
 """
 Installation utilities for keyboard shortcuts
 """
-from subprocess import Popen, PIPE, call
 import sys
+from subprocess import PIPE, Popen, call
 
 
 def force_unicode(s):
     if type(s) is not str:
-        return s.decode('UTF-8')
+        return s.decode("UTF-8")
     else:
         return s
 
 
-class SettingsInstallerBase(object):
-
+class SettingsInstallerBase:
     def get_next_custom_keybinding_name(self, existing):
         if len(existing) == 0:
             next_val = 0
         else:
             # All custom keybindings start with 'custom'
-            PREFIX = 'custom'
-            next_val = max(int(n[len(PREFIX):]) for n in existing if n.startswith(PREFIX)) + 1
-        return 'custom' + str(next_val)
+            PREFIX = "custom"
+            next_val = max(int(n[len(PREFIX) :]) for n in existing if n.startswith(PREFIX)) + 1
+        return "custom" + str(next_val)
 
     def install_shortcuts(self):
         already_installed = set()
@@ -31,7 +30,7 @@ class SettingsInstallerBase(object):
             if action.startswith("player_do "):
                 already_installed.add(action.strip())
 
-        commands = ['play', 'pause', 'playpause', 'stop', 'next', 'prev']
+        commands = ["play", "pause", "playpause", "stop", "next", "prev"]
         for cmd in commands:
             action = "player_do " + cmd
             display_name = "player_do - " + cmd
@@ -41,35 +40,36 @@ class SettingsInstallerBase(object):
                 custom_keybindings.add(keybinding_name)
 
     def launch_keybinding_editor(self):
-        sys.stdout.write("Launching keybinding editor...\nEdit 'player_do' keybindings in 'Custom shortcuts' section, and close when done.\n")
+        sys.stdout.write(
+            "Launching keybinding editor...\nEdit 'player_do' keybindings in 'Custom shortcuts' section, and close when done.\n"
+        )
         success = False
         p = Popen(["which", self.KEYBINDINGS_GUI_EDITOR], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         val = force_unicode(stdout).strip() + " " + " ".join(self.KEYBINDINGS_GUI_EDITOR_ARGS)
         if val != "":
-            call(["nohup %s &" % val], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
+            call([f"nohup {val} &"], shell=True, stdout=open("/dev/null"), stderr=open("/dev/null"))
             success = True
         if not success:
-            sys.stdout.write("Error: Couldn't find program %s for editing keybindings.\n" % self.KEYBINDINGS_GUI_EDITOR)
+            sys.stdout.write(f"Error: Couldn't find program {self.KEYBINDINGS_GUI_EDITOR} for editing keybindings.\n")
             raise SystemExit()
 
 
 class Gnome2SettingsInstallerBase(SettingsInstallerBase):
-
     def get_custom_keybindings(self):
         try:
             p = Popen([self.CONF_TOOL, "--all-dirs", self.KEYBINDINGS_CONF_PREFIX], stdout=PIPE)
         except OSError:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
         retval = []
         stdout = force_unicode(stdout)
         for x in stdout.split("\n"):
             x = x.strip()
             if x.startswith(self.KEYBINDINGS_CONF_PREFIX):
-                x = x[len(self.KEYBINDINGS_CONF_PREFIX) + 1:]
+                x = x[len(self.KEYBINDINGS_CONF_PREFIX) + 1 :]
                 if x.startswith("custom"):
                     retval.append(x)
         return retval
@@ -81,20 +81,20 @@ class Gnome2SettingsInstallerBase(SettingsInstallerBase):
         self.set_gconf_val(self.KEYBINDINGS_CONF_PREFIX + "/" + keybinding_name + "/" + "action", action)
         self.set_gconf_val(self.KEYBINDINGS_CONF_PREFIX + "/" + keybinding_name + "/" + "binding", "")
         self.set_gconf_val(self.KEYBINDINGS_CONF_PREFIX + "/" + keybinding_name + "/" + "name", display_name)
-        sys.stdout.write("Keybinding slot for action '%s' created\n" % action)
+        sys.stdout.write(f"Keybinding slot for action '{action}' created\n")
 
-    def get_gconf_val(self,  key):
+    def get_gconf_val(self, key):
         p = Popen([self.CONF_TOOL, "--get", key], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
         return force_unicode(stdout)
 
     def set_gconf_val(self, key, val):
         p = Popen([self.CONF_TOOL, "--type", "string", "--set", key, val], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
 
 
 class Gnome2SettingsInstaller(Gnome2SettingsInstallerBase):
@@ -114,40 +114,42 @@ class Gnome3SettingsInstallerBase(SettingsInstallerBase):
     """
     Common functionality between Gnome3 and Cinnamon
     """
+
     CONF_TOOL = "gsettings"
 
     def get_custom_keybindings(self):
-        l = self.get_gsettings_val(self.KEYBINDINGS_SCHEMA, None, self.KEYBINDINGS_LIST_CUSTOM_KEY)
+        values = self.get_gsettings_val(self.KEYBINDINGS_SCHEMA, None, self.KEYBINDINGS_LIST_CUSTOM_KEY)
         retval = []
-        for i in l:
+        for i in values:
             retval.append(self.get_custom_keybinding_working_name(i))
         return retval
 
     def get_keybinding_action(self, keybinding_name):
-        return self.get_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                                      self.keybinding_path(keybinding_name),
-                                      "command")
+        return self.get_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM, self.keybinding_path(keybinding_name), "command")
 
     def install_keybinding(self, keybinding_name, action, display_name):
-        self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                               self.keybinding_path(keybinding_name), "command", action)
-        self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                               self.keybinding_path(keybinding_name), "name", display_name)
-        self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM,
-                               self.keybinding_path(keybinding_name), "binding", self.empty_binding_val())
+        self.set_gsettings_val(self.KEYBINDINGS_SCHEMA_CUSTOM, self.keybinding_path(keybinding_name), "command", action)
+        self.set_gsettings_val(
+            self.KEYBINDINGS_SCHEMA_CUSTOM, self.keybinding_path(keybinding_name), "name", display_name
+        )
+        self.set_gsettings_val(
+            self.KEYBINDINGS_SCHEMA_CUSTOM, self.keybinding_path(keybinding_name), "binding", self.empty_binding_val()
+        )
 
         # Update the list key
-        l = self.get_custom_keybindings()  # list like ['custom0', 'custom1']
-        l.append(keybinding_name)
-        self.set_gsettings_val(self.KEYBINDINGS_SCHEMA, None,
-                               self.KEYBINDINGS_LIST_CUSTOM_KEY,
-                               [self.get_custom_keybinding_stored_value(n) for n in l]
-                               )
+        keybindings = self.get_custom_keybindings()  # list like ['custom0', 'custom1']
+        keybindings.append(keybinding_name)
+        self.set_gsettings_val(
+            self.KEYBINDINGS_SCHEMA,
+            None,
+            self.KEYBINDINGS_LIST_CUSTOM_KEY,
+            [self.get_custom_keybinding_stored_value(n) for n in keybindings],
+        )
 
-        sys.stdout.write("Keybinding slot for action '%s' created\n" % action)
+        sys.stdout.write(f"Keybinding slot for action '{action}' created\n")
 
     def keybinding_path(self, name):
-        return self.KEYBINDINGS_CUSTOM_KEY_PATH + name + '/'
+        return self.KEYBINDINGS_CUSTOM_KEY_PATH + name + "/"
 
     def get_gsettings_val(self, schema, path, key):
         arg = schema
@@ -156,7 +158,7 @@ class Gnome3SettingsInstallerBase(SettingsInstallerBase):
         p = Popen([self.CONF_TOOL, "get", arg, key], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
         v = force_unicode(stdout)
 
         return decode_gsettings(v)
@@ -168,7 +170,7 @@ class Gnome3SettingsInstallerBase(SettingsInstallerBase):
         p = Popen([self.CONF_TOOL, "set", arg, key, force_unicode(encode_gsettings(val))], stdout=PIPE)
         stdout, stderr = p.communicate(None)
         if p.returncode != 0:
-            raise Exception("Could not use %s to manipulate settings" % self.CONF_TOOL)
+            raise Exception(f"Could not use {self.CONF_TOOL} to manipulate settings")
 
     def get_custom_keybinding_working_name(self, stored_value):
         raise NotImplementedError()
@@ -184,7 +186,7 @@ class Gnome3SettingsInstaller(Gnome3SettingsInstallerBase):
     KEYBINDINGS_SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
     KEYBINDINGS_LIST_CUSTOM_KEY = "custom-keybindings"
     KEYBINDINGS_SCHEMA_CUSTOM = "org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
-    KEYBINDINGS_CUSTOM_KEY_PATH = '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/'
+    KEYBINDINGS_CUSTOM_KEY_PATH = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
 
     # Gnome3 stores
     # ['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/'...]
@@ -192,8 +194,8 @@ class Gnome3SettingsInstaller(Gnome3SettingsInstallerBase):
 
     def get_custom_keybinding_working_name(self, stored_value):
         assert stored_value.startswith(self.KEYBINDINGS_CUSTOM_KEY_PATH)
-        val = stored_value.split('/')[-2]
-        assert val.startswith('custom')
+        val = stored_value.split("/")[-2]
+        assert val.startswith("custom")
         return val
 
     def get_custom_keybinding_stored_value(self, name):
@@ -216,6 +218,7 @@ class CinnamonSettingsInstallerBase(Gnome3SettingsInstallerBase):
     def get_custom_keybinding_stored_value(self, name):
         return name
 
+
 class Cinnamon1SettingsInstaller(CinnamonSettingsInstallerBase):
     KEYBINDINGS_SCHEMA = "org.cinnamon.keybindings"
     KEYBINDINGS_SCHEMA_CUSTOM = "org.cinnamon.keybindings.custom-keybinding"
@@ -234,7 +237,7 @@ class Cinnamon2SettingsInstaller(CinnamonSettingsInstallerBase):
         return []
 
 
-class CinnamonSettingsInstaller(object):
+class CinnamonSettingsInstaller:
     installers = [Cinnamon1SettingsInstaller(), Cinnamon2SettingsInstaller()]
 
     def install_shortcuts(self):
@@ -250,7 +253,7 @@ class CinnamonSettingsInstaller(object):
 
 def decode_gsettings(v):
     # Looks like some Python based syntax
-    if v.startswith('@as []'):
+    if v.startswith("@as []"):
         return []
     else:
         return eval(v)
@@ -265,7 +268,9 @@ def mk_installer(cls):
         i = cls()
         i.install_shortcuts()
         i.launch_keybinding_editor()
+
     return installer
+
 
 install_gnome = mk_installer(Gnome2SettingsInstaller)
 install_mate = mk_installer(MateSettingsInstaller)
