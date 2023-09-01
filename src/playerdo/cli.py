@@ -7,6 +7,7 @@
 # 'stopped', but some music players do not have such a state or it cannot be
 # determined.
 #
+import argparse
 import sys
 
 from playerdo import __version__, install
@@ -14,36 +15,31 @@ from playerdo.backends.base import Player
 from playerdo.main import do_command, do_test, find_players, is_playing
 
 
-def usage(players):
-    # Print help and list of supported players
-    help = f"""player_do {__version__}
-Usage: player_do <command>
+def make_command_help():
+    command_help = "The command to run. The following commands are available: \n\n"
 
-  Media players that are currently running will be detected, and the command
-  will be passed on to the first, giving priority to players that seem to be
-  active.
-
-<command> is one of:
-"""
     max_len = len(sorted(commands, key=lambda c: len(c[0]))[-1][0])
+
     for name, doc, f in commands:
-        help += " " + name + " " * (max_len - len(name) + 2) + doc + "\n"
+        command_help += "  " + name + " " * (max_len - len(name) + 2) + doc + "\n"
 
-    help += """
+    command_help += """
 Not all operations are supported or fully supported by all players.
+    """
+    return command_help
 
+
+def make_player_help(players):
+    help = """
 Currently supported players (in the order they will currently be used):
+
 """
     for p in players:
         n = getattr(p, "friendly_name", None)
         if n is not None:
-            help += " " + n + "\n"
+            help += "  " + n + "\n"
 
     return help
-
-
-def print_usage(players):
-    sys.stdout.write(usage(players))
 
 
 # List of commands: (name, docstring, callable)
@@ -78,7 +74,6 @@ commands.extend(
             is_playing,
         ),
         ("test", "Tests that all dependencies are available.", do_test),
-        ("help", "Prints help.", print_usage),
         (
             "install_gnome",
             "Install keybindings for GNOME2 and launch keybinding editor",
@@ -106,18 +101,26 @@ command_dict = dict((name, f) for name, doc, f in commands)
 
 
 def main():
-    argv = sys.argv
     players = find_players()
+    parser = argparse.ArgumentParser(
+        prog=f"player_do {__version__}",
+        description=(
+            """Media players that are currently running will be detected,
+and the command will be passed on to the first, giving
+priority to players that seem to be active."""
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog=make_player_help(players),
+    )
 
-    if len(argv) < 2:
-        print_usage(players)
-        sys.exit(1)
+    parser.add_argument("command", help=make_command_help())
 
-    name = argv[1]
-    command = command_dict.get(name, None)
+    args = parser.parse_args()
+
+    command = command_dict.get(args.command, None)
     if command is None:
-        sys.stderr.write(f"Unrecognised command '{name}'.\n\n")
-        print_usage(players)
+        sys.stderr.write(f"Unrecognised command '{args.command}'.\n\n")
+        parser.print_help()
         sys.exit(1)
     else:
         command(players)

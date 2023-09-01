@@ -14,7 +14,7 @@ It also includes commands ``install_gnome``, ``install_mate``,
 initially on GNOME2/Mate/GNOME3/Cinnamon. It can, however, be used with any
 system where you can map keyboard shortcuts to commands.
 
-The currently supported media players can be seen by running ``player_do help``.
+The currently supported media players can be seen by running ``player_do --help``.
 Those that have been tested include the following:
 
 * Audacious
@@ -77,9 +77,15 @@ do not use or have installed.
 Usage
 -----
 
-::
+Control the currently active player using commands like::
 
-    player_do help
+  player_do playpause
+  player_do next
+
+
+For all commands and other options, see::
+
+  player_do --help
 
 
 
