@@ -1,6 +1,7 @@
 """
 Installation utilities for keyboard shortcuts
 """
+
 import sys
 from subprocess import PIPE, Popen, call
 

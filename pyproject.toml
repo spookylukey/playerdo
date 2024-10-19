@@ -1,15 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "playerdo"
+authors = [{name = "Luke Plant", email = "luke@lukeplant.me.uk"}]
+description = "Control various media players from a single command line interface."
+license = {text = "BSD"}
+keywords = ["music media MPRIS player command interface wrapper"]
+classifiers = [
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+    "License :: OSI Approved :: BSD License",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.8"
+dynamic = ["version"]
+dependencies = [
+    "dbus-python>=1.3.2",
+]
+
+[project.readme]
+file = "README.rst"
+content-type = "text/x-rst"
+
+[project.urls]
+Homepage = "http://bitbucket.org/spookylukey/playerdo"
+
+[project.scripts]
+player_do = "playerdo.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages]
+find = {namespaces = false}
+
+[tool.setuptools.dynamic]
+version = {attr = "playerdo.__version__"}
+
+[tool.distutils.bdist_wheel]
+universal = 0
+
+[tool.flake8]
+max_line_length = "120"
+
+
 [tool.black]
 line-length = 120
-#required-version = '23.7.0'
-target-version = ['py311']
-
-
-[tool.ruff]
-line-length = 120
-extend-select = [
-  "UP",  # enable pyupgrade
-  "I",  # enable isort
-  "FLY",  # enably flynt
-]
-target-version = 'py38'
-ignore = ["E501","E731"]
+# required-version = '22.1.0' # see https://github.com/psf/black/issues/2493
+target-version = ['py38']
