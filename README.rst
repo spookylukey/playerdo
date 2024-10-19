@@ -53,34 +53,55 @@ below::
 
 This should install everything for you.
 
+If an appropriate binary wheel for dbus is not found, the above may require
+development packages to be installed, including ``libglib2.0-dev`` and
+``libdbus-1-dev`` and Python development headers.
+
+
 Installation using pipx
 -----------------------
 
 On older systems or if ``uv`` is not available, you can install using `pipx
 <https://pypi.org/project/pipx/>`_ to install it into its own virtualenv, using
-your standard system Python 3, with “system” libraries available (due to the
-DBUS requirementw)::
+your standard system Python 3, like this::
 
-    pipx install playerdo --system-site-packages --python `which python3`
+  pipx install playerdo
 
-You will also need to install Python DBUS bindings. We recommend doing this at
-the system level. On Debian-like systems this is usually done with one of the
-following packages::
 
-      python-dbus
-      python3-dbus
+Installation using pip
+----------------------
 
-An alternative to system-level Python DBUS is to use pipx to install them::
+If the above is problematic (due to difficulties compiling dbus, typically), you
+can install using ``pip`` and a system copy of the ``dbus-python`` bindings.
 
-    pipx inject playerdo dbus-python
+on Debian Linux systems (including Ubuntu, Linuxmint etc), first do::
 
-(If an appropriate binary wheel for dbus is not found, the above may require
-development packages to be installed, including ``libglib2.0-dev`` and
-``libdbus-1-dev`` and Python development headers).
+  sudo apt install python3-dbus
 
-After installation, you can use ``player_do test`` to ensure everything expected
-is available. It’s normal to see error messages relating to players that you
-do not use or have installed.
+Then create a virtualenv for the installation, in a location of your choosing,
+with the ``--system-site-packages`` option::
+
+  python3 -m venv playerdo_venv --system-site-packages
+
+Activate it::
+
+  . playerdo_venv/bin/activate
+
+Install playerdo without dependencies::
+
+  pip install --no-deps playerdo
+
+Check it is installed::
+
+  playerdo --help
+
+Check dbus bindings are found - the following should print nothing::
+
+  playerdo test
+
+The following prints the full path to where you’ve installed id::
+
+  which playerdo
 
 Usage
 -----
