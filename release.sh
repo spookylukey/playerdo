@@ -3,10 +3,13 @@
 umask 000
 rm -rf build dist
 git ls-tree --full-tree --name-only -r HEAD | xargs chmod ugo+r
-find player_do -type d | xargs chmod ugo+rx
+find src -type d | xargs chmod ugo+rx
 
-./setup.py sdist bdist_wheel || exit 1
+uv build --sdist --wheel || exit 1
+uv publish --sdist --wheel  || exit 1
 
-VERSION=$(./setup.py --version) || exit 1
+VERSION=$(uv pip show playerdo | grep 'Version: ' | cut -f 2 -d ' ' | tr -d '\n') || exit 1
 
-twine upload dist/playerdo-$VERSION-py3-none-any.whl dist/playerdo-$VERSION.tar.gz
+git tag $VERSION || exit 1
+git push || exit 1
+git push --tags || exit 1
