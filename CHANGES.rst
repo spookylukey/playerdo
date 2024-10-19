@@ -1,6 +1,12 @@
 Change log
 ==========
 
+Version 2.2 (2024-10-19)
+------------------------
+
+* Fixed broken packaging
+* Switched to uv/pyproject.toml for managing dependencies and recommended installing.
+
 Version 2.1 (2023-09-01)
 ------------------------
 

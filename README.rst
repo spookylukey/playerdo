@@ -44,23 +44,31 @@ directory. Patches gratefully received!
 Installation
 ------------
 
-You need Python 3.8 or later. You can use pip to install::
+You need Python 3.8 or later, Python 3.12 or later recommended as I test on
+that. We recommend the use of `uv <https://docs.astral.sh/uv/>`_ to install as
+below::
 
-    pip install playerdo
+    uv python install 3.12
+    uv tool install playerdo --python 3.12
 
-However, we recommend the use of `pipx <https://pypi.org/project/pipx/>`_ to
-install it into its own virtualenv, using your standard system Python 3,
-with “system” libraries available (due to the DBUS requirement below)::
+This should install everything for you.
+
+Installation using pipx
+-----------------------
+
+On older systems or if ``uv`` is not available, you can install using `pipx
+<https://pypi.org/project/pipx/>`_ to install it into its own virtualenv, using
+your standard system Python 3, with “system” libraries available (due to the
+DBUS requirementw)::
 
     pipx install playerdo --system-site-packages --python `which python3`
 
-You also need to install Python DBUS bindings. We recommend doing this at
+You will also need to install Python DBUS bindings. We recommend doing this at
 the system level. On Debian-like systems this is usually done with one of the
 following packages::
 
       python-dbus
       python3-dbus
-
 
 An alternative to system-level Python DBUS is to use pipx to install them::
 
