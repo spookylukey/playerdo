@@ -38,11 +38,8 @@ Homepage = "http://bitbucket.org/spookylukey/playerdo"
 player_do = "playerdo.cli:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
 include-package-data = true
-
-[tool.setuptools.packages]
-find = {namespaces = false}
+package-dir = {"" = "src"}
 
 [tool.setuptools.dynamic]
 version = {attr = "playerdo.__version__"}
